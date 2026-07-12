@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+  <section>
+    <h2>First Team Squad</h2>
+    <p>Meet the players representing Colchester Rangers FC this season.</p>
+    <div class="player-grid">
+      {% for player in players %}
+        <article class="player-card">
+          <div class="player-image-wrap">
+            <img src="{{ url_for('static', filename='images/' + player.image) }}" alt="{{ player.name }}" />
+            <span class="player-image-number">#{{ player.number }}</span>
+          </div>
+          <div>
+            <div class="player-meta">
+              <span class="player-number">#{{ player.number }}</span>
+              <h3>{{ player.name }}</h3>
+              <p class="position">{{ player.position }}</p>
+            </div>
+            <p class="player-bio">{{ player.bio }}</p>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}

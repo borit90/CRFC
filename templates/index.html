@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block content %}
+  <section class="hero">
+    <h2>Welcome to the Official Club Site</h2>
+    <p>{{ club_info.description }}</p>
+    <div class="home-cards">
+      <article>
+        <h3>Special Mention</h3>
+        <p>We would firstly like to thank all our players and followers for making this journey possible, BUT we would like to give a massive thank you, firstly to our nutritionist Ben, who has kindly donated some money into the clubs account to help with day to day running of the club. Also a big thank you to James our goalkeeper who has also donated some extra funds to help the club get going! This is the spirit that makes our club great! </p>
+      </article>
+        
+      <article>
+        <h3>New Manager!</h3>
+        <p>We are delighted to welcome Mark Pilgrim as our new manager and the wealth of experience he brings! We look forward to seeing where he takes us! </p>
+      </article>
+      <article>
+        <h3>Welcome onboard to the new Club Nutrionist & Secretary</h3>
+        <p>Welcome to the team, Ben! He is taking on a dual role, helping with the club's nutritional needs and administrative tasks. </p>
+      </article>
+      <article>
+        <h3>Sponsorship Opportunities</h3>
+        <p>The club are currently seeking new sponsorship deals for the upcoming season, whether you are looking to sponsor training gear or match shirts. With nearly 700 followers already, and thousands of views per post, now is the time to join the journey with us!</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="training-info">
+    <div class="training-card">
+      <h3>Training Information</h3>
+      <p><strong>Location:</strong> Colchester Sports Park, Home Lane, Colchester CO1 2QT</p>
+      <p><strong>Time:</strong> Wednesdays, 7:00pm – 8:00pm</p>
+      <p><strong>Trial enquiries:</strong> Please contact Mark Pilgrim (manager) on 07906058930 or Henry Wright on 07923425258 for trial information.</p>
+    </div>
+  </section>
+
+  <section class="charity-section">
+    <div class="charity-card">
+      <a href="https://www.ocduk.org/" target="_blank" rel="noopener noreferrer" class="charity-logo-link">
+        <img src="{{ url_for('static', filename='images/OCD-logo.png') }}" alt="OCD-UK logo" class="charity-logo" />
+      </a>
+      <h3>Charity Partner</h3>
+      <p>We as a club are super proud to be unveil our chosen charity for the upcoming season, which has affected many of us! Us as a club, and the players as individuals, will be doing everything we can to raise money and awareness for <strong>OCD-UK</strong>, the UK charity providing advice, information and support for people affected by obsessive compulsive disorder.</p>
+      <p><a href="https://www.ocduk.org/" target="_blank" rel="noopener noreferrer">Visit OCD-UK</a> to learn more about their campaign and how to get involved.</p>
+    </div>
+  </section>
+
+  <section class="featured">
+    <div>
+      <h3>Star Players</h3>
+      <ul class="card-list">
+        {% for player in players %}
+          <li>
+            <strong>#{{ player.number }} {{ player.name }}</strong>
+            <span>{{ player.position }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+      <a class="button" href="{{ url_for('show_players') }}">View Full Squad</a>
+    </div>
+    <div>
+      <h3>Recent Results</h3>
+      <ul class="card-list">
+        {% for result in results %}
+          <li>{{ result.date }} — {{ result.opponent }} <strong>{{ result.score }}</strong></li>
+        {% endfor %}
+      </ul>
+      <a class="button" href="{{ url_for('show_results') }}">View All Results</a>
+    </div>
+    <div>
+      <h3>Upcoming Fixtures</h3>
+      <ul class="card-list">
+       {% for match in matches %}
+          <li>{{match.date}} — {{ match.opponent }} - {{ match.venue }} - {{match.competition}}</li>
+        {% endfor %}
+      </ul>
+      <a class="button" href="{{ url_for('show_fixtures') }}">View All Fixtures</a>
+    </div>
+  </section>
+{% endblock %}
