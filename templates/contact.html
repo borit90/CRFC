@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+  <section>
+    <h2>Contact the Club</h2>
+    <p>Send a message to Colchester Rangers FC. We will read every submission and reply when possible.</p>
+    {% if email_enabled %}
+      <p class="note">Email delivery is configured. Your message will be sent to the club inbox.</p>
+    {% else %}
+      <p class="note">Email delivery is not configured yet. Messages are still accepted, but no email will be sent automatically.</p>
+    {% endif %}
+    <form method="post" class="contact-form">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" required />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="message">Message</label>
+      <textarea id="message" name="message" rows="6" required></textarea>
+
+      <button type="submit">Send Message</button>
+    </form>
+  </section>
+{% endblock %}

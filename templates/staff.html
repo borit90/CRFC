@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+  <section>
+    <h2>Club Staff</h2>
+    <p>Meet the people behind the scenes keeping Colchester Rangers FC running.</p>
+    <div class="staff-grid">
+      {% for member in staff %}
+        <article class="profile-card">
+          {% if member.image %}
+            <img src="{{ url_for('static', filename='images/' + member.image) }}" alt="{{ member.name }} portrait" class="profile-image" />
+          {% endif %}
+          <h3>{{ member.name }}</h3>
+          <p class="role">{{ member.role }}</p>
+          <p>{{ member.bio }}</p>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}

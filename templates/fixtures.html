@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+  <section>
+    <h2>Upcoming Fixtures</h2>
+    <p>See the next scheduled matches for Colchester Rangers FC.</p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Opponent</th>
+          <th>Venue</th>
+          <th>Competition</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for match in matches %}
+          <tr>
+            <td>{{ match.date }}</td>
+            <td>{{ match.opponent }}</td>
+            <td>{{ match.venue }}</td>
+            <td>{{ match.competition }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+{% endblock %}

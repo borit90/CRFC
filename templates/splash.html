@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ title or 'Welcome — Colchester Rangers FC' }}</title>
+    <meta name="description" content="{{ meta_description or 'Welcome to Colchester Rangers FC. Click the badge to enter the official club site.' }}" />
+    <meta name="keywords" content="{{ meta_keywords or 'Colchester Rangers FC, football club, Essex football, community football, local football, youth football, club news, trials, sponsors' }}" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="{{ canonical_url or request.base_url }}" />
+    <link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='images/colchester-rangers-logo.jpg') }}" />
+    <meta property="og:title" content="{{ title or 'Welcome — Colchester Rangers FC' }}" />
+    <meta property="og:description" content="{{ meta_description or 'Welcome to Colchester Rangers FC. Click the badge to enter the official club site.' }}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ canonical_url or request.base_url }}" />
+    <meta property="og:image" content="{{ url_for('static', filename='images/logo.png', _external=true) }}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{ title or 'Welcome — Colchester Rangers FC' }}" />
+    <meta name="twitter:description" content="{{ meta_description or 'Welcome to Colchester Rangers FC. Click the badge to enter the official club site.' }}" />
+    <meta name="twitter:image" content="{{ url_for('static', filename='images/logo.png', _external=true) }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+  <body class="splash-page">
+    <div class="splash-page-content">
+      <div class="splash-card">
+        <a href="{{ url_for('home') }}" class="splash-logo" aria-label="Enter site">
+          <img src="{{ url_for('static', filename='images/colchester-rangers-logo.jpg') }}" alt="Colchester Rangers FC logo" />
+        </a>
+        <div class="splash-enter-text">Click the badge to enter</div>
+      </div>
+
+      <section class="splash-sponsors-section" aria-labelledby="splash-sponsors-title">
+        <h2 id="splash-sponsors-title">Club Sponsors</h2>
+        <div class="splash-sponsors-list">
+          {% for sponsor in sponsors %}
+            <article class="sponsor-card splash-sponsor-card">
+              {% if sponsor.logo %}
+                {% if sponsor.url %}
+                  <a href="{{ sponsor.url }}" target="_blank" rel="noopener noreferrer">
+                    <img src="{{ url_for('static', filename='images/' + sponsor.logo) }}" alt="{{ sponsor.name }} logo" class="sponsor-logo" />
+                  </a>
+                {% else %}
+                  <img src="{{ url_for('static', filename='images/' + sponsor.logo) }}" alt="{{ sponsor.name }} logo" class="sponsor-logo" />
+                {% endif %}
+              {% endif %}
+            </article>
+          {% endfor %}
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
