@@ -70,8 +70,8 @@ players = [
     {"name": "Finlay Parry", "position": "striker", "number": 18, "image": "finlay-parry.jpg", "bio": "Finlay is a powerful striker who loves running onto balls behind the defence."},
     {"name": "Jordan Lucky", "position": "Left Wing", "number": 7, "image": "jordan-lucky.jpg", "bio": "Jordan is from an athletics background so has pace to burn, and uses it effectively in an attacking capacity as well as defensively."},
     {"name": "Ronnie Mason", "position": "Winger", "number": 11, "image": "ronnie-mason.jpg", "bio": "A winger who loves driving forwards, picking out passes and getting into the box. Looks to pass and get an assist more than he does shoot."},
-    {"name": "Adam Lancaster", "position": "Left Back", "number": 12, "image": "static/images/colchester-rangers-logo.jpg", "bio": "An explosive full back who loves to get forward when he can and in possesion loves to play an inverted full back role."},
-    {"name": "Jake Nailer", "position": "Left Winger", "number": 26, "image": "static/images/colchester-rangers-logo.jpg", "bio": "An inverted winger or inside forward who loves roaming in from the channels to get involved in play through the middle."},
+    {"name": "Adam Lancaster", "position": "Left Back", "number": 12, "image": "colchester-rangers-logo.jpg", "bio": "An explosive full back who loves to get forward when he can and in possesion loves to play an inverted full back role."},
+    {"name": "Jake Nailer", "position": "Left Winger", "number": 26, "image": "colchester-rangers-logo.jpg", "bio": "An inverted winger or inside forward who loves roaming in from the channels to get involved in play through the middle."},
     
 ]
 
