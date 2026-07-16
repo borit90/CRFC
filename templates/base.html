@@ -105,7 +105,11 @@
 
     <footer class="site-footer">
       <div class="container">
-        <p>© {{ 2026 }} Colchester Rangers FC. Proudly built with Python and Flask by our Site sponsors.</p>
+        {% if sponsors and sponsors[0] %}
+          <p>© {{ 2026 }} Colchester Rangers FC. Proudly sponsored by <a href="{{ sponsors[0].url }}" target="_blank" rel="noopener noreferrer">{{ sponsors[0].name }}</a>.</p>
+        {% else %}
+          <p>© {{ 2026 }} Colchester Rangers FC. Proudly built with Python and Flask by our site sponsors.</p>
+        {% endif %}
       </div>
     </footer>
 

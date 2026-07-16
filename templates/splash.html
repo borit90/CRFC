@@ -30,9 +30,18 @@
       </div>
 
       <section class="splash-sponsors-section" aria-labelledby="splash-sponsors-title">
-        <h2 id="splash-sponsors-title">Club Sponsors</h2>
+        <h2 id="splash-sponsors-title">Main Sponsor</h2>
+        {% if sponsors and sponsors[0] %}
+          <div class="splash-main-sponsor">
+            <a href="{{ sponsors[0].url }}" target="_blank" rel="noopener noreferrer">
+              <img src="{{ url_for('static', filename='images/' + sponsors[0].logo) }}" alt="{{ sponsors[0].name }} logo" class="sponsor-logo main-sponsor-logo" />
+            </a>
+          </div>
+        {% endif %}
+
+        <h3>Other Club Sponsors</h3>
         <div class="splash-sponsors-list">
-          {% for sponsor in sponsors %}
+          {% for sponsor in sponsors[1:] %}
             <article class="sponsor-card splash-sponsor-card">
               {% if sponsor.logo %}
                 {% if sponsor.url %}

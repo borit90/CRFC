@@ -37,17 +37,18 @@ club_info = {
 }
 
 sponsors = [
+    {"name": "HCDW Commercial", "description": "Main club sponsor for Colchester Rangers FC. Proudly sponsoring the home kit for the next 2 years", "logo": "hcdw-logo.png", "url": "https://www.instagram.com/hcdwcommercial/"},
     {"name": "BC Python Development", "description": "Leading Python development, proud website provider.", "logo": "BClogo.png", "url": "https://mysite-production-e447.up.railway.app/"},
-    {"name": "HCDW Commercial", "description": "Proud commercial partner of the club.", "logo": "hcdw-logo.png", "url": "https://www.instagram.com/hcdwcommercial/"},
-]
+    ]
 
 
 staff = [
     {"name": "Mark Pilgrim", "role": "Manager", "bio": "First team manager, with a wealth of experience locally at ESBL premier level.", "image": "mark-pilgrim.jpg"},
     {"name": "George Pilgrim", "role": "Assistant Manager", "bio": "George is joining the club as assistant manager, to work alongside Mark, having worked together previously and forming a great partnership!", "image": "george-pilgrim.jpg"},
-    {"name": "Henry Wright", "role": "Club Chairman, Fixture secretary, Welfare Officer", "bio": "Proud founder of Colchester Rangers FC, overseeing all club operations.", "image": "henry-wright.jpg"},
+    {"name": "Henry Wright", "role": "Club Chairman, Welfare Officer", "bio": "Proud founder of Colchester Rangers FC, overseeing all club operations.", "image": "henry-wright.jpg"},
     {"name": "Ben Burnett", "role": "Club Nutritionist & Club Secretary", "bio": "Helping with the day to day running of the club, and providing nutritional guidance to enhance perfromance.", "image": "ben-burnett.jpg"},
-    {"name": "Alex Gooding", "role": "Treasurer", "bio": "Overseeing the club's financial operations and ensuring the club financial health.", "image": "alex-gooding.jpg"}, 
+    {"name": "Alex Gooding", "role": "Treasurer", "bio": "Overseeing the club's financial operations and ensuring the club financial health.", "image": "alex-gooding.jpg"},
+    {"name": "Chera Asefa", "role": "Fixture Secretary", "bio": "We are delighted to have Chera on board helping us out as our new fixture secretary.", "image": "static/images/chera-asefa.jpg"}, 
 ]
 players = [
     {"name": "James Gentry", "position": "Goalkeeper", "number": 1, "image": "james-gentry.jpg", "bio": "A reliable shot-stopper with great reflexes and command of the box."},
@@ -71,8 +72,8 @@ players = [
     {"name": "Jordan Lucky", "position": "Left Wing", "number": 7, "image": "jordan-lucky.jpg", "bio": "Jordan is from an athletics background so has pace to burn, and uses it effectively in an attacking capacity as well as defensively."},
     {"name": "Ronnie Mason", "position": "Winger", "number": 11, "image": "ronnie-mason.jpg", "bio": "A winger who loves driving forwards, picking out passes and getting into the box. Looks to pass and get an assist more than he does shoot."},
     {"name": "Adam Lancaster", "position": "Left Back", "number": 12, "image": "adam-lancaster.jpg", "bio": "An explosive full back who loves to get forward when he can and in possesion loves to play an inverted full back role."},
-    {"name": "Jake Nailer", "position": "Left Winger", "number": 26, "image": "colchester-rangers-logo.jpg", "bio": "An inverted winger or inside forward who loves roaming in from the channels to get involved in play through the middle."},
-    
+    {"name": "Jake Nailer", "position": "Left Winger", "number": 26, "image": "jake-nailer.jpg", "bio": "An inverted winger or inside forward who loves roaming in from the channels to get involved in play through the middle."},
+    {"name": "Nouman Sher", "position": "Striker", "number": 19, "image": "nouman-sher.jpg", "bio": "A centre Forward with a keen eye for goal, and always willing to put the work in."},
 ]
 
 results = [
