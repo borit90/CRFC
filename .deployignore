@@ -1,0 +1,13 @@
+.git/
+.github/
+.gitignore
+.env
+.env.*
+__pycache__/
+*.py[cod]
+*.pyo
+*.log
+.venv/
+venv/
+instance/
+*.sqlite3

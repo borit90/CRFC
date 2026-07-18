@@ -50,6 +50,20 @@ Render can run this app as a Python web service.
 - Add environment variables for the contact form and `FLASK_SECRET_KEY` in the Render dashboard.
 - The app already binds to `0.0.0.0` and uses the `PORT` environment variable when started directly.
 
+## DeployHQ settings
+
+For a DeployHQ deployment to FastHosts, use the following values:
+
+- Server host: `sftp.colchester-rangers-fc.co.uk`
+- Connection type: `SFTP`
+- Username: your FastHosts SFTP username
+- Password: your FastHosts SFTP password
+- Remote path: your hosting web root directory
+- Deployment branch: `main`
+- Ignore rules: include [.deployignore](.deployignore)
+
+If your host expects the app to start from the web root, make sure the deployment target is the directory that contains [passenger_wsgi.py](passenger_wsgi.py) and [.htaccess](.htaccess).
+
 ## Optional email delivery
 
 If you want the contact form to send real emails, configure SMTP environment variables before running the app.
