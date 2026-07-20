@@ -1,6 +1,6 @@
 # Colchester Rangers FC
 
-A simple Python Flask website for Colchester Rangers FC.
+A Python Flask website for Colchester Rangers FC.
 
 ## Features
 
@@ -8,7 +8,7 @@ A simple Python Flask website for Colchester Rangers FC.
 - Staff page
 - Players page
 - Results page
-- Contact form with form validation
+- Contact form with validation
 
 ## Run locally
 
@@ -33,52 +33,33 @@ A simple Python Flask website for Colchester Rangers FC.
 
 4. Open `http://127.0.0.1:5000` in your browser.
 
-## FastHosts deployment
+## cPanel deployment for Krysta
 
-For FastHosts-style Python hosting, the app is ready to be served through a WSGI entry point.
+This project is prepared for deployment to a cPanel Python/Passenger hosting account.
 
-- Use [app.py](app.py) as the application module, or the included [wsgi.py](wsgi.py) / [passenger_wsgi.py](passenger_wsgi.py) entry points.
-- Ensure the hosting panel installs the requirements from [requirements.txt](requirements.txt).
-- Set the environment variables for the contact form and secret key in the hosting control panel.
+### Files to upload
 
-## Render deployment
+- [app.py](app.py) - Flask application
+- [passenger_wsgi.py](passenger_wsgi.py) - WSGI entry point for cPanel
+- [.htaccess](.htaccess) - Passenger startup settings
+- [requirements.txt](requirements.txt) - Python dependencies
+- [static/](static) and [templates/](templates) - site assets and pages
 
-Render can run this app as a Python web service.
+### Deployment steps
 
-- Build command: `pip install -r requirements.txt`
-- Start command: `gunicorn wsgi:app`
-- Add environment variables for the contact form and `FLASK_SECRET_KEY` in the Render dashboard.
-- The app already binds to `0.0.0.0` and uses the `PORT` environment variable when started directly.
+1. Upload the project files to the domain document root, or to the application folder if the site is running from a subdirectory.
+2. Make sure the folder contains [passenger_wsgi.py](passenger_wsgi.py) and [.htaccess](.htaccess).
+3. In cPanel, install the packages from [requirements.txt](requirements.txt) using the Python app or dependency installer if available.
+4. Set the environment variables for the contact form and secret key in cPanel's environment settings:
+   - `FLASK_SECRET_KEY`
+   - `MAIL_SERVER`
+   - `MAIL_PORT`
+   - `MAIL_USE_TLS`
+   - `MAIL_USERNAME`
+   - `MAIL_PASSWORD`
+   - `MAIL_FROM`
+   - `MAIL_TO`
 
-## DeployHQ settings
+### Optional email delivery
 
-For a DeployHQ deployment to FastHosts, use the following values:
-
-- Server host: `sftp.colchester-rangers-fc.co.uk`
-- Connection type: `SFTP`
-- Username: your FastHosts SFTP username
-- Password: your FastHosts SFTP password
-- Remote path: your hosting web root directory
-- Deployment branch: `main`
-- Ignore rules: include [.deployignore](.deployignore)
-
-If your host expects the app to start from the web root, make sure the deployment target is the directory that contains [passenger_wsgi.py](passenger_wsgi.py) and [.htaccess](.htaccess).
-
-## Optional email delivery
-
-If you want the contact form to send real emails, configure SMTP environment variables before running the app.
-
-Example PowerShell values:
-
-```powershell
-$env:MAIL_SERVER = "smtp.example.com"
-$env:MAIL_PORT = "587"
-$env:MAIL_USERNAME = "user@example.com"
-$env:MAIL_PASSWORD = "your-password"
-$env:MAIL_FROM = "club@example.com"
-$env:MAIL_TO = "contact@example.com"
-$env:FLASK_SECRET_KEY = "a-secure-secret-key"
-python app.py
-```
-
-If SMTP is not configured, the form will still accept submissions and show a success message locally.
+If SMTP is not configured, the contact form will still load locally and show a friendly message instead of failing.
