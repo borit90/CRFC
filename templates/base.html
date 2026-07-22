@@ -13,25 +13,16 @@
     <meta property="og:description" content="{{ meta_description or club_info.description }}" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="{{ canonical_url or request.base_url }}" />
-    <meta property="og:image" content="{{ url_for('static', filename='images/colchester-rangers-logo.jpg', _external=true) }}" />
+    <meta property="og:image" content="{{ meta_image or url_for('static', filename='images/colchester-rangers-logo.jpg', _external=true) }}" />
     <meta property="og:site_name" content="{{ club_info.name }}" />
     <link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='images/colchester-rangers-logo.jpg') }}" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="{{ title or club_info.name }}" />
     <meta name="twitter:description" content="{{ meta_description or club_info.description }}" />
-    <meta name="twitter:image" content="{{ url_for('static', filename='images/colchester-rangers-logo.jpg', _external=true) }}" />
+    <meta name="twitter:image" content="{{ meta_image or url_for('static', filename='images/colchester-rangers-logo.jpg', _external=true) }}" />
+    <link rel="alternate" type="application/rss+xml" title="Colchester Rangers FC news" href="{{ url_for('sitemap', _external=True) }}" />
     <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "SportsTeam",
-        "name": "{{ club_info.name }}",
-        "description": "{{ club_info.description }}",
-        "url": "{{ canonical_url or request.base_url }}",
-        "logo": "{{ url_for('static', filename='images/colchester-rangers-logo.jpg', _external=true) }}",
-        "sameAs": [
-          "https://www.instagram.com/colchesterrangers/"
-        ]
-      }
+      {{ schema_data | safe }}
     </script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
   </head>

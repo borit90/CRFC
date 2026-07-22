@@ -1,11 +1,13 @@
 import os
 import random
+import json
+from datetime import datetime
 from pathlib import Path
 from dotenv import load_dotenv, find_dotenv
 import smtplib
 import ssl
 from email.message import EmailMessage
-from flask import Flask, render_template, request, flash, redirect, url_for
+from flask import Flask, render_template, request, flash, redirect, url_for, Response
 
 app = Flask(__name__)
 
@@ -140,13 +142,49 @@ def inject_sponsors():
 DEFAULT_KEYWORDS = "Colchester Rangers FC, football club, local football, Essex, youth football, club news, trials, sponsors"
 
 
-def render_seo_template(template, title, description, keywords=None, canonical_url=None, **context):
+def render_seo_template(template, title, description, keywords=None, canonical_url=None, image_url=None, page_type="WebPage", **context):
+    canonical_url = canonical_url or request.base_url
+    image_url = image_url or url_for("static", filename="images/colchester-rangers-logo.jpg", _external=True)
+    schema_data = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "WebSite",
+                "name": club_info["name"],
+                "url": request.url_root.rstrip("/"),
+                "description": club_info["description"],
+                "publisher": {
+                    "@type": "SportsOrganization",
+                    "name": club_info["name"],
+                },
+            },
+            {
+                "@type": "SportsTeam",
+                "name": club_info["name"],
+                "description": club_info["description"],
+                "url": request.url_root.rstrip("/"),
+                "logo": image_url,
+                "sameAs": [
+                    "https://www.instagram.com/colchesterrangers/"
+                ],
+            },
+            {
+                "@type": page_type,
+                "name": title,
+                "url": canonical_url,
+                "description": description,
+                "inLanguage": "en-GB",
+            },
+        ],
+    }
     return render_template(
         template,
         title=title,
         meta_description=description,
         meta_keywords=keywords or DEFAULT_KEYWORDS,
-        canonical_url=canonical_url or request.base_url,
+        canonical_url=canonical_url,
+        meta_image=image_url,
+        schema_data=json.dumps(schema_data, indent=2),
         **context,
     )
 
@@ -256,8 +294,47 @@ def contact():
         title="Contact | Colchester Rangers FC",
         description="Contact Colchester Rangers FC for enquiries about trials, sponsorship or club information.",
         canonical_url=url_for("contact", _external=True),
+        meta_image=url_for("static", filename="images/contact-page-image.jpg", _external=True) if os.path.exists(Path(__file__).resolve().parent / "static" / "images" / "contact-page-image.jpg") else None,
         email_enabled=bool(MAIL_TO and MAIL_SERVER),
     )
+
+
+@app.route("/sitemap.xml")
+def sitemap():
+    pages = [
+        url_for("enter", _external=True),
+        url_for("home", _external=True),
+        url_for("show_staff", _external=True),
+        url_for("show_players", _external=True),
+        url_for("show_results", _external=True),
+        url_for("show_fixtures", _external=True),
+        url_for("contact", _external=True),
+    ]
+    lastmod = datetime.utcnow().date().isoformat()
+    sitemap_xml = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ]
+    for page in pages:
+        sitemap_xml.append("  <url>")
+        sitemap_xml.append(f"    <loc>{page}</loc>")
+        sitemap_xml.append(f"    <lastmod>{lastmod}</lastmod>")
+        sitemap_xml.append("    <changefreq>weekly</changefreq>")
+        sitemap_xml.append("    <priority>0.8</priority>")
+        sitemap_xml.append("  </url>")
+    sitemap_xml.append("</urlset>")
+    return Response("\n".join(sitemap_xml), mimetype="application/xml")
+
+
+@app.route("/robots.txt")
+def robots():
+    sitemap_url = url_for("sitemap", _external=True)
+    content = """
+User-agent: *
+Allow: /
+Sitemap: %s
+""" % sitemap_url
+    return Response(content.strip() + "\n", mimetype="text/plain")
 
 
 if __name__ == "__main__":
