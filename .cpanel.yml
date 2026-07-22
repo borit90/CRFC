@@ -1,0 +1,6 @@
+deployment:
+  branch: main
+  tasks:
+    - python3 -m pip install --user --upgrade pip setuptools wheel
+    - python3 -m pip install --user -r requirements.txt
+    - touch passenger_wsgi.py
