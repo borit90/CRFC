@@ -8,26 +8,25 @@ from email.message import EmailMessage
 from flask import Flask, render_template, request, flash, redirect, url_for
 
 app = Flask(__name__)
-# Try to locate a .env file: prefer find_dotenv(), fall back to project directory next to this file.
-dotenv_path = find_dotenv()
+
+# Load environment variables from a local .env file if present.
+dotenv_path = find_dotenv(usecwd=True)
 if not dotenv_path:
-    candidate = Path(__file__).resolve().parent / '.env'
+    candidate = Path(__file__).resolve().parent / ".env"
     if candidate.exists():
         dotenv_path = str(candidate)
 
 if dotenv_path:
     load_dotenv(dotenv_path)
-else:
-    print("Warning: .env file not found; relying on environment variables if present.")
 
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "replace-with-a-secure-key")
 
-MAIL_SERVER = os.environ.get("MAIL_SERVER")
-MAIL_PORT = int(os.environ.get("MAIL_PORT", 587))
-MAIL_USE_TLS = os.environ.get("MAIL_USE_TLS", "true").lower() in ("1", "true", "yes")
+MAIL_SERVER = (os.environ.get("MAIL_SERVER") or "localhost").strip() or "localhost"
+MAIL_PORT = int(os.environ.get("MAIL_PORT", "25" if MAIL_SERVER == "localhost" else "587"))
+MAIL_USE_TLS = os.environ.get("MAIL_USE_TLS", "false" if MAIL_SERVER == "localhost" else "true").lower() in ("1", "true", "yes")
 MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
 MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
-MAIL_FROM = os.environ.get("MAIL_FROM", MAIL_USERNAME)
+MAIL_FROM = os.environ.get("MAIL_FROM") or MAIL_USERNAME or "noreply@localhost"
 MAIL_TO = os.environ.get("MAIL_TO") or MAIL_FROM
 
 club_info = {
@@ -74,6 +73,7 @@ players = [
     {"name": "Adam Lancaster", "position": "Left Back", "number": 12, "image": "adam-lancaster.jpg", "bio": "An explosive full back who loves to get forward when he can and in possesion loves to play an inverted full back role."},
     {"name": "Jake Nailer", "position": "Left Winger", "number": 26, "image": "jake-nailer.jpg", "bio": "An inverted winger or inside forward who loves roaming in from the channels to get involved in play through the middle."},
     {"name": "Nouman Sher", "position": "Striker", "number": 19, "image": "nouman-sher.jpg", "bio": "A centre Forward with a keen eye for goal, and always willing to put the work in."},
+    {"name": "Akinbusuyi Solomon", "position": "Centre Back", "number": 3, "image": "akinbusuyi-solomon.jpg", "bio": "A composed and reliable centre back who is strong in the air and has a good reading of the game."},
 ]
 
 results = [
@@ -97,13 +97,14 @@ matches = [
 
 
 def send_contact_email(name, email, message_text):
-    if not (MAIL_SERVER and MAIL_USERNAME and MAIL_PASSWORD and MAIL_TO):
+    recipients = [item.strip() for item in (MAIL_TO or "").split(",") if item.strip()]
+    if not recipients:
         return False
 
     msg = EmailMessage()
     msg["Subject"] = f"CRFC Contact Form: {name}"
     msg["From"] = MAIL_FROM
-    msg["To"] = MAIL_TO
+    msg["To"] = ", ".join(recipients)
     msg.set_content(
         f"Name: {name}\nEmail: {email}\n\nMessage:\n{message_text}\n"
     )
@@ -112,13 +113,15 @@ def send_contact_email(name, email, message_text):
         if MAIL_PORT == 465:
             context = ssl.create_default_context()
             with smtplib.SMTP_SSL(MAIL_SERVER, MAIL_PORT, context=context) as server:
-                server.login(MAIL_USERNAME, MAIL_PASSWORD)
+                if MAIL_USERNAME and MAIL_PASSWORD:
+                    server.login(MAIL_USERNAME, MAIL_PASSWORD)
                 server.send_message(msg)
         else:
             with smtplib.SMTP(MAIL_SERVER, MAIL_PORT) as server:
                 if MAIL_USE_TLS:
                     server.starttls(context=ssl.create_default_context())
-                server.login(MAIL_USERNAME, MAIL_PASSWORD)
+                if MAIL_USERNAME and MAIL_PASSWORD:
+                    server.login(MAIL_USERNAME, MAIL_PASSWORD)
                 server.send_message(msg)
         return True
     except Exception as exc:
@@ -253,7 +256,7 @@ def contact():
         title="Contact | Colchester Rangers FC",
         description="Contact Colchester Rangers FC for enquiries about trials, sponsorship or club information.",
         canonical_url=url_for("contact", _external=True),
-        email_enabled=bool(MAIL_SERVER and MAIL_USERNAME and MAIL_PASSWORD and MAIL_TO),
+        email_enabled=bool(MAIL_TO and MAIL_SERVER),
     )
 
 

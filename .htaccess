@@ -1,6 +1,5 @@
 Options -Indexes
 
-# cPanel / Passenger-friendly startup for the Flask app.
 PassengerEnabled On
 PassengerAppType wsgi
 PassengerStartupFile passenger_wsgi.py
