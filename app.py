@@ -75,7 +75,7 @@ players = [
     {"name": "Adam Lancaster", "position": "Left Back", "number": 12, "image": "adam-lancaster.jpg", "bio": "An explosive full back who loves to get forward when he can and in possesion loves to play an inverted full back role."},
     {"name": "Jake Nailer", "position": "Left Winger", "number": 26, "image": "jake-nailer.jpg", "bio": "An inverted winger or inside forward who loves roaming in from the channels to get involved in play through the middle."},
     {"name": "Nouman Sher", "position": "Striker", "number": 19, "image": "nouman-sher.jpg", "bio": "A centre Forward with a keen eye for goal, and always willing to put the work in."},
-    {"name": "Akinbusuyi Solomon", "position": "Centre Back", "number": 3, "image": "akinbusuyi-solomon.jpg", "bio": "A composed and reliable centre back who is strong in the air and has a good reading of the game."},
+    {"name": "Akinbusuyi Solomon", "position": "Defensive Midfield", "number": 30, "image": "akinbusuyi-solomon.jpg", "bio": "Loves winning the ball back, and breaking up opposition play to get us back on the front foot."},
 ]
 
 results = [
