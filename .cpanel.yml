@@ -4,5 +4,3 @@ deployment:
     - python3 -m pip install --user --upgrade pip setuptools wheel
     - python3 -m pip install --user -r requirements.txt
     - touch passenger_wsgi.py
-
-    ## undo delete the following line if you don't want to run migrations automatically
