@@ -1,6 +1,5 @@
 deployment:
   branch: main
   tasks:
-    - python3 -m pip install --user --upgrade pip setuptools wheel
-    - python3 -m pip install --user -r requirements.txt
-    - touch passenger_wsgi.py
+   - source virtualenv/repositories/CRFC/3.12/bin/activate && cd /home/colches7/repositories/CRFC && pip install -r requirements.txt
+    - mkdir -p /home/colches7/repositories/CRFC/tmp && touch /home/colches7/repositories/CRFC/tmp/restart.txt
