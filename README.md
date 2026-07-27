@@ -63,3 +63,34 @@ This project is prepared for deployment to a cPanel Python/Passenger hosting acc
 ### Optional email delivery
 
 If SMTP is not configured, the contact form will still load locally and show a friendly message instead of failing.
+
+## Hostinger deployment
+
+This project is compatible with Hostinger's Python app hosting (hPanel) which uses Passenger/Wsgi.
+
+Steps:
+
+1. Upload the project files to your application folder (or `public_html` for a top-level site).
+2. Ensure `passenger_wsgi.py` and `.htaccess` are present in the same folder. `passenger_wsgi.py` should expose the WSGI application as `application` (already configured).
+3. Install Python packages using Hostinger's hPanel Python app installer or via SSH:
+
+```powershell
+pip install -r requirements.txt
+```
+
+4. Set the required environment variables in hPanel (Python app → Environment):
+   - `FLASK_SECRET_KEY`
+   - `MAIL_SERVER`
+   - `MAIL_PORT`
+   - `MAIL_USE_TLS`
+   - `MAIL_USERNAME`
+   - `MAIL_PASSWORD`
+   - `MAIL_FROM`
+   - `MAIL_TO`
+
+5. Restart the Python application from hPanel after installing dependencies and setting environment variables.
+
+Notes:
+
+- If you do not have SMTP configured, the contact form will still accept submissions but will not send email.
+- For debugging, check the application's error logs in hPanel to see tracebacks and startup errors.
