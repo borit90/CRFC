@@ -142,9 +142,9 @@ def inject_sponsors():
 DEFAULT_KEYWORDS = "Colchester Rangers FC, football club, local football, Essex, youth football, club news, trials, sponsors"
 
 
-def render_seo_template(template, title, description, keywords=None, canonical_url=None, image_url=None, page_type="WebPage", **context):
+def render_seo_template(template, title, description, keywords=None, canonical_url=None, image_url=None, page_type="WebPage", meta_image=None, **context):
     canonical_url = canonical_url or request.base_url
-    image_url = image_url or url_for("static", filename="images/colchester-rangers-logo.jpg", _external=True)
+    resolved_image_url = meta_image or image_url or url_for("static", filename="images/colchester-rangers-logo.jpg", _external=True)
     schema_data = {
         "@context": "https://schema.org",
         "@graph": [
@@ -183,7 +183,7 @@ def render_seo_template(template, title, description, keywords=None, canonical_u
         meta_description=description,
         meta_keywords=keywords or DEFAULT_KEYWORDS,
         canonical_url=canonical_url,
-        meta_image=image_url,
+        meta_image=resolved_image_url,
         schema_data=json.dumps(schema_data, indent=2),
         **context,
     )
