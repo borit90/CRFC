@@ -4,6 +4,16 @@ from unittest.mock import patch
 import app as app_module
 
 
+class ContactPageTests(unittest.TestCase):
+    def test_contact_page_renders_without_error(self):
+        client = app_module.app.test_client()
+
+        response = client.get("/contact")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"Contact the Club", response.data)
+
+
 class ContactFormMailTests(unittest.TestCase):
     def test_send_contact_email_returns_false_when_configuration_missing(self):
         with (
