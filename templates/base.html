@@ -38,9 +38,10 @@
         </div>
 
         <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" type="button">
-          <span></span>
-          <span></span>
-          <span></span>
+          <span class="nav-label">Menu</span>
+          <svg class="nav-chevron" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
+            <path d="M3 4 L7 6 L3 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+          </svg>
         </button>
 
         <nav class="site-nav" aria-label="Main navigation">
@@ -96,8 +97,14 @@
 
     <footer class="site-footer">
       <div class="container">
-        {% if sponsors and sponsors[0] %}
-          <p>© {{ 2026 }} Colchester Rangers FC. Proudly sponsored by <a href="{{ sponsors[0].url }}" target="_blank" rel="noopener noreferrer">{{ sponsors[0].name }}</a>.</p>
+        {% set footer_sponsor = None %}
+        {% for sponsor in sponsors %}
+          {% if sponsor.name == 'BC Python Development' %}
+            {% set footer_sponsor = sponsor %}
+          {% endif %}
+        {% endfor %}
+        {% if footer_sponsor %}
+          <p>© {{ 2026 }} Colchester Rangers FC. Proudly sponsored by <a href="{{ footer_sponsor.url or '#' }}" target="_blank" rel="noopener noreferrer">BC Python Dev</a>.</p>
         {% else %}
           <p>© {{ 2026 }} Colchester Rangers FC. Proudly built with Python and Flask by our site sponsors.</p>
         {% endif %}
