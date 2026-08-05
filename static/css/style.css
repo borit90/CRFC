@@ -129,12 +129,20 @@ body {
 
 .nav-toggle {
   display: none;
-  background: transparent;
+  background: rgba(0, 0, 0, 0.25);
   border: none;
   padding: 0.5rem;
   cursor: pointer;
   align-items: center;
   gap: 0.5rem;
+  color: #ffffff;
+  border-radius: 10px;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.nav-toggle:hover,
+.nav-toggle:focus-visible {
+  background: rgba(0, 0, 0, 0.4);
 }
 
 .nav-toggle .nav-label {
@@ -168,6 +176,11 @@ body {
 .site-nav a {
   color: #ffffff;
   text-decoration: none;
+}
+
+.site-nav a:hover,
+.site-nav a:focus {
+  color: #ffffff;
 }
 
 .social-link {
@@ -225,7 +238,7 @@ body {
     gap: 0.5rem;
     margin-top: 1rem;
     padding: 1rem;
-    background: rgba(31, 155, 50, 0.95);
+    background: rgba(31, 155, 50, 0.98);
     border-radius: 14px;
   }
 
@@ -234,8 +247,13 @@ body {
     width: 100%;
     padding: 0.75rem 0.5rem;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.1);
     color: #ffffff;
+  }
+
+  .site-nav a:hover,
+  .site-nav a:focus {
+    background: rgba(255, 255, 255, 0.18);
   }
 
   .site-header.nav-open .site-nav {
