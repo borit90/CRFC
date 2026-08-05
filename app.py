@@ -77,7 +77,7 @@ players = [
     {"name": "Jake Nailer", "position": "Left Winger", "number": 26, "image": "jake-nailer.jpg", "bio": "An inverted winger or inside forward who loves roaming in from the channels to get involved in play through the middle."},
     {"name": "Nouman Sher", "position": "Striker", "number": 19, "image": "nouman-sher.jpg", "bio": "A centre Forward with a keen eye for goal, and always willing to put the work in."},
     {"name": "Akinbusuyi Solomon", "position": "Defensive Midfield", "number": 30, "image": "akinbusuyi-solomon.jpg", "bio": "Loves winning the ball back, and breaking up opposition play to get us back on the front foot."},
-    {"name": "Ryan Doggett", "position": "Centre Back", "number": 31, "image": "ryan-doggett.jpg", "bio": "Old school centre back, body on the line, strong tackling and aerial ability."},
+    {"name": "Ryan Doggett", "position": "Centre Back", "number": 33, "image": "ryan-doggett.jpg", "bio": "Old school centre back, body on the line, strong tackling and aerial ability."},
 
 ]
 
