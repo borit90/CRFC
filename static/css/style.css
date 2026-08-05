@@ -133,16 +133,30 @@ body {
   border: none;
   padding: 0.5rem;
   cursor: pointer;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.nav-toggle span {
-  display: block;
-  width: 26px;
-  height: 3px;
-  margin-bottom: 5px;
-  background: #ffffff;
-  border-radius: 999px;
-  transition: transform 0.25s ease, opacity 0.25s ease;
+.nav-toggle .nav-label {
+  color: #ffffff;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.35rem 0.6rem;
+  border-radius: 8px;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.nav-toggle .nav-chevron {
+  width: 14px;
+  height: 14px;
+  color: #ffffff;
+  display: inline-block;
+  transform: rotate(0deg);
+  transition: transform 0.2s ease;
+}
+
+.site-header.nav-open .nav-toggle .nav-chevron {
+  transform: rotate(90deg);
 }
 
 .site-nav {
@@ -211,7 +225,7 @@ body {
     gap: 0.5rem;
     margin-top: 1rem;
     padding: 1rem;
-    background: rgba(0, 46, 93, 0.95);
+    background: rgba(31, 155, 50, 0.95);
     border-radius: 14px;
   }
 
