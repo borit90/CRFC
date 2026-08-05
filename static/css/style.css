@@ -221,6 +221,23 @@ body {
 
   .nav-toggle {
     display: inline-flex;
+    background: #ffffff;
+    color: #065f46;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .nav-toggle:hover,
+  .nav-toggle:focus-visible {
+    background: #f7faf7;
+  }
+
+  .nav-toggle .nav-label {
+    color: #065f46;
+    background: rgba(245, 255, 245, 0.9);
+  }
+
+  .nav-toggle .nav-chevron {
+    color: #065f46;
   }
 
   .site-nav {
