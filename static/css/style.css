@@ -129,24 +129,32 @@ body {
 
 .nav-toggle {
   display: none;
-  background: rgba(0, 0, 0, 0.25);
+  background: transparent;
   border: none;
   padding: 0.5rem;
   cursor: pointer;
   align-items: center;
   gap: 0.5rem;
-    color: #ffffff !important;
-    border-radius: 10px;
-    transition: background 0.15s ease, transform 0.15s ease;
-  }
+  color: #ffffff;
+  border-radius: 10px;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
 
-  .nav-toggle:hover,
-  .nav-toggle:focus-visible {
-    background: rgba(0, 0, 0, 0.4);
-  }
+.nav-toggle:hover,
+.nav-toggle:focus-visible {
+  background: rgba(255, 255, 255, 0.08);
+}
 
-  .nav-toggle .nav-label {
-    color: #ffffff !important;
+.nav-toggle .nav-label {
+  color: #ffffff;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.35rem 0.6rem;
+  border-radius: 8px;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.nav-toggle .nav-chevron {
   width: 14px;
   height: 14px;
   color: #ffffff;
@@ -222,7 +230,7 @@ body {
   .nav-toggle {
     display: inline-flex;
     background: #ffffff;
-    color: #065f46;
+    color: #000000;
     border: 1px solid rgba(0, 0, 0, 0.08);
   }
 
@@ -232,12 +240,12 @@ body {
   }
 
   .nav-toggle .nav-label {
-    color: #065f46;
-    background: rgba(245, 255, 245, 0.9);
+    color: #000000;
+    background: #ffffff;
   }
 
   .nav-toggle .nav-chevron {
-    color: #065f46;
+    color: #000000;
   }
 
   .site-nav {
