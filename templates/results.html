@@ -17,12 +17,12 @@
       <tbody>
         {% for result in results %}
           <tr>
-            <td>{{ result.date }}</td>
-            <td>{{ result.opponent }}</td>
-            <td>{{ result.score }}</td>
-            <td>{{ result.venue }}</td>
-            <td>{{ result.competition }}</td>
-            <td class="goalscorers-cell">{{ result.get("goalscorers", "—") }}</td>
+            <td data-label="Date">{{ result.date }}</td>
+            <td data-label="Opponent">{{ result.opponent }}</td>
+            <td data-label="Score">{{ result.score }}</td>
+            <td data-label="Venue">{{ result.venue }}</td>
+            <td data-label="Competition">{{ result.competition }}</td>
+            <td class="goalscorers-cell" data-label="Goalscorers">{{ result.get("goalscorers", "—") }}</td>
           </tr>
         {% endfor %}
       </tbody>

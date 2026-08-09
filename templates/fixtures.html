@@ -15,10 +15,10 @@
       <tbody>
         {% for match in matches %}
           <tr>
-            <td>{{ match.date }}</td>
-            <td>{{ match.opponent }}</td>
-            <td>{{ match.venue }}</td>
-            <td>{{ match.competition }}</td>
+            <td data-label="Date">{{ match.date }}</td>
+            <td data-label="Opponent">{{ match.opponent }}</td>
+            <td data-label="Venue">{{ match.venue }}</td>
+            <td data-label="Competition">{{ match.competition }}</td>
           </tr>
         {% endfor %}
       </tbody>

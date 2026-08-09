@@ -46,12 +46,10 @@ sponsors = [
 
 staff = [
     {"name": "Mark Pilgrim", "role": "Manager", "bio": "First team manager, with a wealth of experience locally at ESBL premier level.", "image": "mark-pilgrim.jpg"},
-    {"name": "George Pilgrim", "role": "Assistant Manager", "bio": "George is joining the club as assistant manager, to work alongside Mark, having worked together previously and forming a great partnership!", "image": "george-pilgrim.jpg"},
-    {"name": "Henry Wright", "role": "Club Chairman, Welfare Officer", "bio": "Proud founder of Colchester Rangers FC, overseeing all club operations.", "image": "henry-wright.jpg"},
+    {"name": "Henry Wright", "role": "Club Chairman, Welfare Officer, fixture secretary", "bio": "Proud founder of Colchester Rangers FC, overseeing all club operations.", "image": "henry-wright.jpg"},
     {"name": "Ben Burnett", "role": "Club Nutritionist & Club Secretary", "bio": "Helping with the day to day running of the club, and providing nutritional guidance to enhance perfromance.", "image": "ben-burnett.jpg"},
     {"name": "Alex Gooding", "role": "Treasurer", "bio": "Overseeing the club's financial operations and ensuring the club financial health.", "image": "alex-gooding.jpg"},
-    {"name": "Chera Asefa", "role": "Fixture Secretary", "bio": "We are delighted to have Chera on board helping us out as our new fixture secretary.", "image": "static/images/chera-asefa.jpg"}, 
-]
+    ]
 players = [
     {"name": "James Gentry", "position": "Goalkeeper", "number": 1, "image": "james-gentry.jpg", "bio": "A reliable shot-stopper with great reflexes and command of the box."},
     {"name": "Joshua Hill", "position": "Right wing / striker", "number":17, "image": "joshua-hill.jpg", "bio": "Pacy forward, likes to put crosses in from the right or cut inside for a shot. Loves running onto balls in behind the defence."},
@@ -61,21 +59,17 @@ players = [
     {"name": "Rui Sousa", "position": "Midfielder", "number": 13, "image": "rui-sousa.jpg", "bio": "Rui is a versatile player who is comfortable in multiple positions, enjoys playing out from the back, carrying the ball forward and picking a pass into space."},
     {"name": "Fernando Orellana", "position": "Forward", "number": 20, "image": "fernando-orellana.jpg", "bio": "Fernando is a dynamic forward who excels in the final third, known for his pace and clinical finishing."},
     {"name": "Jamie Mayes-Allen", "position": "Full Back", "number": 2, "image": "jamie-mayes-allen.jpg", "bio": "A solid ball winning full back who is very versatile and can be depended on at the back."},
-    {"name": "Charlie Offord", "position": "Centre Midfielder", "number": 23, "image": "charlie-offord.jpg", "bio": "Big strengths are through balls, holding the ball up under pressure and creating space for team mates. Can also provide defensive cover when required."},
     {"name": "Bobby Clarke", "position": "Fullback", "number": 5, "image": "bobby-clarke.jpg", "bio": "Athletic full back with excellent pace and defensive capabilities."},
     {"name": "Will Ashton", "position": "Forward", "number": 9, "image": "will-ashton.jpg", "bio": "Versatile forward with bags of pace and power and a passion for scoring and creating goals."},
     {"name": "Noah Gray", "position": "Centre Midfielder", "number":21, "image": "noah-gray.jpg", "bio": "A technically gifted midfielder with a great eye for a pass and the ability to control the tempo of the game. Also cover fullback if required."},
-    {"name": "Williams Franklin", "position": "Centre Back", "number": 27, "image": "williams-franklin.jpg", "bio": "Calm, Vocal, and disciplined, leads and controls the defence with authority and is a strong presence in the air."},
     {"name": "Joshua Wordingham", "position": "Right Winger / Central Midfielder", "number": 16, "image": "josh-wordingham.jpg", "bio": "Determined player, never gives up, and will always push himself to the limit! "},
     {"name": "Arthur Cox", "position": "Wing back", "number": 15, "image": "arthur-cox.jpg", "bio": "Enjoys simple football, doesn't overcomplicate things, simple passes keep possesion and look for the early pass."},
-    {"name": "Alfie Beard", "position": "Fullback", "number": 22, "image": "alfie-beard.jpg", "bio": "Defensive fullback, possesses great pace and defensive capabilities."},
     {"name": "Daniel Walsh", "position": "Winger/Centre Attacking Midfielder", "number": 8, "image": "dan-walsh.jpg", "bio": "Direct, fast paced football, always looking to play through balls into the channels and to create shooting opportunities for himself and team mates."},
     {"name": "Finlay Parry", "position": "striker", "number": 18, "image": "finlay-parry.jpg", "bio": "Finlay is a powerful striker who loves running onto balls behind the defence."},
     {"name": "Jordan Lucky", "position": "Left Wing", "number": 7, "image": "jordan-lucky.jpg", "bio": "Jordan is from an athletics background so has pace to burn, and uses it effectively in an attacking capacity as well as defensively."},
     {"name": "Ronnie Mason", "position": "Winger", "number": 11, "image": "ronnie-mason.jpg", "bio": "A winger who loves driving forwards, picking out passes and getting into the box. Looks to pass and get an assist more than he does shoot."},
     {"name": "Adam Lancaster", "position": "Left Back", "number": 12, "image": "adam-lancaster.jpg", "bio": "An explosive full back who loves to get forward when he can and in possesion loves to play an inverted full back role."},
     {"name": "Jake Nailer", "position": "Left Winger", "number": 26, "image": "jake-nailer.jpg", "bio": "An inverted winger or inside forward who loves roaming in from the channels to get involved in play through the middle."},
-    {"name": "Nouman Sher", "position": "Striker", "number": 19, "image": "nouman-sher.jpg", "bio": "A centre Forward with a keen eye for goal, and always willing to put the work in."},
     {"name": "Akinbusuyi Solomon", "position": "Defensive Midfield", "number": 30, "image": "akinbusuyi-solomon.jpg", "bio": "Loves winning the ball back, and breaking up opposition play to get us back on the front foot."},
     {"name": "Ryan Doggett", "position": "Centre Back", "number": 33, "image": "ryan-doggett.jpg", "bio": "Old school centre back, body on the line, strong tackling and aerial ability."},
 
@@ -83,12 +77,12 @@ players = [
 
 results = [
     {
-        "opponent": "TBA",
-        "score": "TBA",
-        "date": "TBA",
-        "venue": "TBA",
-        "competition": "TBA",
-        "goalscorers": "TBA",
+        "opponent": "Bradfield Rovers Reserves",
+        "score": "6-2",
+        "date": "08/08/2026",
+        "venue": "Harwich High School",
+        "competition": "Friendly",
+        "goalscorers": "Finlay Parry (2)",
     },
 ]
 matches = [
