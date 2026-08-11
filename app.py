@@ -90,7 +90,7 @@ results = [
 ]
 matches = [
         {"opponent": "Dedham Reserves", "date": "August 15, 2026", "venue": "The Duchy, Dedham, CO76AH", "competition": "Friendly"},
-        {"opponent": "Silver End Uniter Reservers", "date": "September 5, 2026", "venue": "Silver End Village Hall", "competition": "League"},
+        {"opponent": "Silver End United Reservers", "date": "September 5, 2026", "venue": "Silver End Village Hall", "competition": "League"},
         {"opponent": "Mersea Island First", "date": "September 12, 2026", "venue": "The Glebe (Colchester) #2 ", "competition": "League"},
         {"opponent": "Broomfield A", "date": "September 19, 2026", "venue": "Broomfield Football Club", "competition": "Cup"},
 
