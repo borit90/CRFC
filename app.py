@@ -72,26 +72,28 @@ players = [
     {"name": "Jake Nailer", "position": "Left Winger", "number": 26, "image": "jake-nailer.jpg", "bio": "An inverted winger or inside forward who loves roaming in from the channels to get involved in play through the middle."},
     {"name": "Akinbusuyi Solomon", "position": "Defensive Midfield", "number": 30, "image": "akinbusuyi-solomon.jpg", "bio": "Loves winning the ball back, and breaking up opposition play to get us back on the front foot."},
     {"name": "Ryan Doggett", "position": "Centre Back", "number": 33, "image": "ryan-doggett.jpg", "bio": "Old school centre back, body on the line, strong tackling and aerial ability."},
-    {"name": "Ben Swanster", "position": "Defender", "number": 31, "image": "colchester-rangers-logo.jpg", "bio": "An experienced and versatile defender, with a good understanding of the game. Good ability to read the game and cut out danger before it develops, and loves to get forward to!"},
-    
-
+    {"name": "Ben Swanster", "position": "Defender", "number": 31, "image": "ben-swanster.jpg", "bio": "An experienced and versatile defender, with a good understanding of the game. Good ability to read the game and cut out danger before it develops, and loves to get forward to!"},
+    {"name": "Henry Wright", "position": "Winger", "number": 14, "image": "henry-wright-p.jpg", "bio": "A direct pacy winger with a good eye for a pass and also for a goal."},
+    {"name": "Dan Pearce", "position": "TBA", "number": 34, "image": "colchester-rangers-logo.jpg", "bio": "TBA"},
+    {"name": "Danny Dibell", "position": "Defensive Midfielder", "number": 32, "image": "colchester-rangers-logo.jpg", "bio": "A left footed defensive midfielder who is strong in the tackle, good at reading the game breaking up playing and progressing the ball forward."},
 ]
 
 results = [
     {
         "opponent": "Bradfield Rovers Reserves",
         "score": "6-2",
-        "date": "08/08/2026",
+        "date": "August 8,2026",
         "venue": "Harwich High School",
         "competition": "Friendly",
         "goalscorers": "Finlay Parry (2)",
     },
 ]
 matches = [
-    {"opponent": "Stillwaters FC", "date": "July 11, 2026", "venue": "TBC", "competition": "Friendly"},
-    {"opponent": "Tekkers FC",  "date": "July 15, 2026", "venue": "TBC", "competition": "Friendly"},
-    {"opponent": "East Bergholt A",  "date": "August 1, 2026", "venue": "TBC", "competition": "Friendly"},
-    {"opponent": "Bradfield Rovers Reserves", "date": "August 8, 2026", "venue": "TBC", "competition": "Friendly"}
+        {"opponent": "Dedham Reserves", "date": "August 15, 2026", "venue": "The Duchy, Dedham, CO76AH", "competition": "Friendly"},
+        {"opponent": "Silver End Uniter Reservers", "date": "September 5, 2026", "venue": "Silver End Village Hall", "competition": "League"},
+        {"opponent": "Mersea Island First", "date": "September 12, 2026", "venue": "The Glebe (Colchester) #2 ", "competition": "League"},
+        {"opponent": "Broomfield A", "date": "September 19, 2026", "venue": "Broomfield Football Club", "competition": "Cup"},
+
 ]
    
 
