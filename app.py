@@ -47,7 +47,7 @@ sponsors = [
 staff = [
     {"name": "Mark Pilgrim", "role": "Manager", "bio": "First team manager, with a wealth of experience locally at ESBL premier level.", "image": "mark-pilgrim.jpg"},
     {"name": "Henry Wright", "role": "Club Chairman, Welfare Officer, fixture secretary", "bio": "Proud founder of Colchester Rangers FC, overseeing all club operations.", "image": "henry-wright.jpg"},
-    {"name": "Ben Burnett", "role": "Club Nutritionist & Club Secretary", "bio": "Helping with the day to day running of the club, and providing nutritional guidance to enhance perfromance.", "image": "ben-burnett.jpg"},
+    {"name": "Ben Burnett", "role": "Club Nutritionist & Club Secretary", "bio": "Helping with the day-to-day running of the club and providing nutritional guidance to enhance performance.", "image": "ben-burnett.jpg"},
     {"name": "Alex Gooding", "role": "Treasurer", "bio": "Overseeing the club's financial operations and ensuring the club financial health.", "image": "alex-gooding.jpg"},
     ]
 players = [
@@ -68,14 +68,13 @@ players = [
     {"name": "Finlay Parry", "position": "striker", "number": 18, "image": "finlay-parry.jpg", "bio": "Finlay is a powerful striker who loves running onto balls behind the defence."},
     {"name": "Jordan Lucky", "position": "Left Wing", "number": 7, "image": "jordan-lucky.jpg", "bio": "Jordan is from an athletics background so has pace to burn, and uses it effectively in an attacking capacity as well as defensively."},
     {"name": "Ronnie Mason", "position": "Winger", "number": 11, "image": "ronnie-mason.jpg", "bio": "A winger who loves driving forwards, picking out passes and getting into the box. Looks to pass and get an assist more than he does shoot."},
-    {"name": "Adam Lancaster", "position": "Left Back", "number": 12, "image": "adam-lancaster.jpg", "bio": "An explosive full back who loves to get forward when he can and in possesion loves to play an inverted full back role."},
     {"name": "Jake Nailer", "position": "Left Winger", "number": 26, "image": "jake-nailer.jpg", "bio": "An inverted winger or inside forward who loves roaming in from the channels to get involved in play through the middle."},
     {"name": "Akinbusuyi Solomon", "position": "Defensive Midfield", "number": 30, "image": "akinbusuyi-solomon.jpg", "bio": "Loves winning the ball back, and breaking up opposition play to get us back on the front foot."},
     {"name": "Ryan Doggett", "position": "Centre Back", "number": 33, "image": "ryan-doggett.jpg", "bio": "Old school centre back, body on the line, strong tackling and aerial ability."},
     {"name": "Ben Swanster", "position": "Defender", "number": 31, "image": "ben-swanster.jpg", "bio": "An experienced and versatile defender, with a good understanding of the game. Good ability to read the game and cut out danger before it develops, and loves to get forward to!"},
     {"name": "Henry Wright", "position": "Winger", "number": 14, "image": "henry-wright-p.jpg", "bio": "A direct pacy winger with a good eye for a pass and also for a goal."},
     {"name": "Dan Pearce", "position": "TBA", "number": 34, "image": "colchester-rangers-logo.jpg", "bio": "TBA"},
-    {"name": "Danny Dibell", "position": "Defensive Midfielder", "number": 32, "image": "colchester-rangers-logo.jpg", "bio": "A left footed defensive midfielder who is strong in the tackle, good at reading the game breaking up playing and progressing the ball forward."},
+    {"name": "Danny Dibell", "position": "Defensive Midfielder", "number": 32, "image": "colchester-rangers-logo.jpg", "bio": "A left-footed defensive midfielder who is strong in the tackle, good at reading the game, breaking up play, and progressing the ball forward."},
 ]
 
 results = [
@@ -207,15 +206,15 @@ def index():
 
 @app.route("/home")
 def home():
-    star_players = random.sample(players, k=min(3, len(players)))
+    star_players = random.sample(players, k=min(4, len(players)))
     return render_seo_template(
         "index.html",
         title="Home | Colchester Rangers FC",
         description="Official homepage for Colchester Rangers FC with club news, players, results, fixtures and training information.",
         canonical_url=url_for("home", _external=True),
         players=star_players,
-        results=results[:3],
-        matches=matches,
+        results=results[:4],
+        matches=matches[:4],
     )
 
 

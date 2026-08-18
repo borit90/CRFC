@@ -12,6 +12,8 @@ class ContactPageTests(unittest.TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"Contact the Club", response.data)
+        self.assertIn(b"hero-image.png", response.data)
+        self.assertIn(b"Contact", response.data)
 
 
 class ContactFormMailTests(unittest.TestCase):

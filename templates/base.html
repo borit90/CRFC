@@ -59,6 +59,16 @@
       </div>
     </header>
 
+    {% set page_heading = (title or club_info.name).split(' | ')[0] %}
+    <section class="page-hero" aria-label="Page banner">
+      <img src="{{ url_for('static', filename='images/hero-image.png') }}" alt="Colchester Rangers FC hero banner" />
+      <div class="page-hero__overlay">
+        <div class="container page-hero__content">
+          <h1>{{ page_heading }}</h1>
+        </div>
+      </div>
+    </section>
+
     <main class="container">
       {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -121,6 +131,36 @@
         navToggle.setAttribute('aria-expanded', String(!expanded));
         siteHeader.classList.toggle('nav-open');
       });
+
+      const sponsorshipModal = document.getElementById('sponsorship-modal');
+      const sponsorshipTrigger = document.querySelector('.sponsorship-modal-trigger');
+      const closeModalButtons = document.querySelectorAll('.modal-close, .modal-close-button, [data-close-modal="true"]');
+
+      const openSponsorshipModal = () => {
+        if (!sponsorshipModal) return;
+        sponsorshipModal.classList.add('is-open');
+        sponsorshipModal.setAttribute('aria-hidden', 'false');
+      };
+
+      const closeSponsorshipModal = () => {
+        if (!sponsorshipModal) return;
+        sponsorshipModal.classList.remove('is-open');
+        sponsorshipModal.setAttribute('aria-hidden', 'true');
+      };
+
+      sponsorshipTrigger?.addEventListener('click', openSponsorshipModal);
+      closeModalButtons.forEach((button) => button.addEventListener('click', closeSponsorshipModal));
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && sponsorshipModal?.classList.contains('is-open')) {
+          closeSponsorshipModal();
+        }
+      });
+
+      if (sponsorshipTrigger) {
+        sponsorshipTrigger.style.display = 'inline-block';
+        sponsorshipTrigger.style.visibility = 'visible';
+        sponsorshipTrigger.style.opacity = '1';
+      }
     </script>
   </body>
 </html>

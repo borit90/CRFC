@@ -5,31 +5,56 @@
     <p>{{ club_info.description }}</p>
     <div class="home-cards">
       <article>
-        <h3>Assistant Manager/First team Coach Required</h3>
-        <p> We are seeking an enthusiastic and passionate individual to join our team, either as Assistant Manager, working alongside Mark, or as a First team Coach, helpign at training and also during warm ups etc. </p>
+        <h3>Assistant Manager / First-Team Coach Required</h3>
+        <p>We are seeking an enthusiastic and passionate individual to join our team, either as Assistant Manager, working alongside Mark, or as a First-Team Coach, helping at training and during warm-ups.</p>
       </article>
-        
+
       <article>
         <h3>New Manager!</h3>
-        <p>We are delighted to welcome Mark Pilgrim as our new manager and the wealth of experience he brings! We look forward to seeing where he takes us! </p>
+        <p>We are delighted to welcome Mark Pilgrim as our new manager and the wealth of experience he brings. We look forward to seeing where he takes us.</p>
       </article>
       <article>
-        <h3>Welcome onboard to the new Club Nutrionist & Secretary</h3>
-        <p>Welcome to the team, Ben! He is taking on a dual role, helping with the club's nutritional needs and administrative tasks. </p>
+        <h3>Welcome Aboard to Our New Club Nutritionist & Secretary</h3>
+        <p>Welcome to the team, Ben! He is taking on a dual role, helping with the club's nutritional needs and administrative tasks.</p>
       </article>
-      <article>
+      <article class="sponsorship-card" id="sponsorship-opportunities">
         <h3>Sponsorship Opportunities</h3>
-        <p>The club are currently seeking new sponsorship deals for the upcoming season, whether you are looking to sponsor training gear or match shirts. With nearly 700 followers already, and thousands of views per post, now is the time to join the journey with us!</p>
+        <p>The club is currently seeking new sponsorship deals for the upcoming season, whether you are looking to sponsor training gear or match shirts. With nearly 700 followers already and thousands of views per post, now is the time to join the journey with us!</p>
+        <a href="#sponsorship-modal" class="button sponsorship-modal-trigger" style="display: inline-block; width: fit-content; margin: 1rem auto 0; padding: 0.9rem 1.3rem; background: #1f9b32; color: #ffffff; border-radius: 999px; text-decoration: none; font-weight: 600;" aria-haspopup="dialog" aria-controls="sponsorship-modal">View Sponsorship Benefits</a>
       </article>
     </div>
   </section>
+
+  <div id="sponsorship-modal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modal="true"></div>
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="sponsorship-modal-title">
+      <button type="button" class="modal-close" aria-label="Close sponsorship details">×</button>
+      <h3 id="sponsorship-modal-title">Why Sponsor Colchester Rangers FC?</h3>
+      <ul class="modal-list">
+        <li>Reach a growing local football audience across social media, community events, and club communications.</li>
+        <li>Build brand awareness with a strong community-focused identity in Essex.</li>
+        <li>Support youth and grassroots football while giving your business a visible local presence.</li>
+        <li>Align with a club that values teamwork, community, and professional development.</li>
+      </ul>
+      <h4>What we offer in return</h4>
+      <ul class="modal-list">
+        <li>Logo placement on sponsored kit, training wear, or club materials where agreed.</li>
+        <li>Social media mentions and promotional shout-outs across our channels.</li>
+        <li>Recognition on the club website and sponsor sections.</li>
+        <li>Opportunities to connect with players, supporters, and local partners through club events.</li>
+      </ul>
+      <div class="modal-actions">
+        <button type="button" class="button modal-close-button">Close</button>
+      </div>
+    </div>
+  </div>
 
   <section class="training-info">
     <div class="training-card">
       <h3>Training Information</h3>
       <p><strong>Location:</strong> Colchester Sports Park, Home Lane, Colchester CO1 2QT</p>
       <p><strong>Time:</strong> Wednesdays, 7:00pm – 8:00pm</p>
-      <p><strong>Trial enquiries:</strong> Please contact Mark Pilgrim (manager) on 07906058930 or Henry Wright on 07923425258 for trial information.</p>
+      <p><strong>Trial enquiries:</strong> Please contact Mark Pilgrim (Manager) on 07906058930 or Henry Wright on 07923425258 for trial information.</p>
     </div>
   </section>
 
@@ -39,7 +64,7 @@
         <img src="{{ url_for('static', filename='images/OCD-logo.png') }}" alt="OCD-UK logo" class="charity-logo" />
       </a>
       <h3>Charity Partner</h3>
-      <p>We as a club are super proud to be unveiling our chosen charity for the upcoming season, which has affected many of us! Us as a club, and the players as individuals, will be doing everything we can to raise money and awareness for <strong>OCD-UK</strong>, the UK charity providing advice, information and support for people affected by obsessive compulsive disorder.</p>
+      <p>As a club, we are incredibly proud to be unveiling our chosen charity for the upcoming season, which has affected many of us. As a club and as individuals, we will be doing everything we can to raise money and awareness for <strong>OCD-UK</strong>, the UK charity providing advice, information and support for people affected by obsessive compulsive disorder.</p>
       <p><a href="https://www.ocduk.org/" target="_blank" rel="noopener noreferrer">Visit OCD-UK</a> to learn more about their campaign and how to get involved.</p>
     </div>
   </section>
