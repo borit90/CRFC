@@ -86,9 +86,10 @@ results = [
         "competition": "Friendly",
         "goalscorers": "Finlay Parry (2)",
     },
+     {"opponent": "Dedham Reserves","score":"5-0", "date": "August 15, 2026", "venue": "The Duchy, Dedham", "competition": "Friendly", "goalscorers": "None"},
 ]
 matches = [
-        {"opponent": "Dedham Reserves", "date": "August 15, 2026", "venue": "The Duchy, Dedham, CO76AH", "competition": "Friendly"},
+        {"opponent": "Stanway", "date": "August 22, 2026", "venue": "Clairmont Road, CO3 9BE", "competition": "Friendly"},
         {"opponent": "Silver End United Reservers", "date": "September 5, 2026", "venue": "Silver End Village Hall", "competition": "League"},
         {"opponent": "Mersea Island First", "date": "September 12, 2026", "venue": "The Glebe (Colchester) #2 ", "competition": "League"},
         {"opponent": "Broomfield A", "date": "September 19, 2026", "venue": "Broomfield Football Club", "competition": "Cup"},
