@@ -45,10 +45,13 @@ sponsors = [
 
 
 staff = [
+   
+    {"name": "Henry Wright", "role": "Club Chairman, Welfare Officer, fixture secretary", "bio": "Proud founder of Colchester Rangers FC, overseeing all club operations.", "image": "henry-wright.jpg"}, 
+    {"name": "Barry Calver", "role": "Vice Chairman", "bio": "Vice chairman of Colchester Rangers FC, supporting the club's operations and development.", "image": "barry-calver.jpg"},
     {"name": "Mark Pilgrim", "role": "Manager", "bio": "First team manager, with a wealth of experience locally at ESBL premier level.", "image": "mark-pilgrim.jpg"},
-    {"name": "Henry Wright", "role": "Club Chairman, Welfare Officer, fixture secretary", "bio": "Proud founder of Colchester Rangers FC, overseeing all club operations.", "image": "henry-wright.jpg"},
     {"name": "Ben Burnett", "role": "Club Nutritionist & Club Secretary", "bio": "Helping with the day-to-day running of the club and providing nutritional guidance to enhance performance.", "image": "ben-burnett.jpg"},
     {"name": "Alex Gooding", "role": "Treasurer", "bio": "Overseeing the club's financial operations and ensuring the club financial health.", "image": "alex-gooding.jpg"},
+    {"name": "Tom Williams", "role": "IT Technician", "bio": "Providing graphics and designs for social media posts and club communications.", "image": "tom-williams.jpg"},
     ]
 players = [
     {"name": "James Gentry", "position": "Goalkeeper", "number": 1, "image": "james-gentry.jpg", "bio": "A reliable shot-stopper with great reflexes and command of the box."},
@@ -78,18 +81,12 @@ players = [
 ]
 
 results = [
-    {
-        "opponent": "Bradfield Rovers Reserves",
-        "score": "6-2",
-        "date": "August 8,2026",
-        "venue": "Harwich High School",
-        "competition": "Friendly",
-        "goalscorers": "Finlay Parry (2)",
-    },
-     {"opponent": "Dedham Reserves","score":"5-0", "date": "August 15, 2026", "venue": "The Duchy, Dedham", "competition": "Friendly", "goalscorers": "None"},
+    { "opponent": "Bradfield Rovers Reserves", "score": "2-6", "date": "August 8,2026", "venue": "Harwich High School", "competition": "Friendly", "goalscorers": "Finlay Parry (2)"},
+    {"opponent": "Dedham Reserves","score":"0-5", "date": "August 15, 2026", "venue": "The Duchy, Dedham", "competition": "Friendly", "goalscorers": "None"},
+    {"opponent": "Wivenhoe United FC", "score":"1-4", "date": "August 29, 2026", "venue": "Clacton Leisure Centre", "competition": "friendly", "goalscorers": "Finlay Parry"},
+
 ]
 matches = [
-        {"opponent": "Stanway", "date": "August 22, 2026", "venue": "Clairmont Road, CO3 9BE", "competition": "Friendly"},
         {"opponent": "Silver End United Reservers", "date": "September 5, 2026", "venue": "Silver End Village Hall", "competition": "League"},
         {"opponent": "Mersea Island First", "date": "September 12, 2026", "venue": "The Glebe (Colchester) #2 ", "competition": "League"},
         {"opponent": "Broomfield A", "date": "September 19, 2026", "venue": "Broomfield Football Club", "competition": "Cup"},

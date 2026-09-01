@@ -15,6 +15,17 @@ class ContactPageTests(unittest.TestCase):
         self.assertIn(b"hero-image.png", response.data)
         self.assertIn(b"Contact", response.data)
 
+    def test_homepage_includes_official_photographer_section(self):
+        client = app_module.app.test_client()
+
+        response = client.get("/home")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"Official Photographer", response.data)
+        self.assertIn(b"Photographs from Colchester Rangers FC matches and events", response.data)
+        self.assertIn(b"Visit the official photographer website", response.data)
+        self.assertIn(b"https://www.instagram.com/", response.data)
+
 
 class ContactFormMailTests(unittest.TestCase):
     def test_send_contact_email_returns_false_when_configuration_missing(self):
