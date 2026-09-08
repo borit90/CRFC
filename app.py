@@ -76,7 +76,7 @@ players = [
     {"name": "Ryan Doggett", "position": "Centre Back", "number": 33, "image": "ryan-doggett.jpg", "bio": "Old school centre back, body on the line, strong tackling and aerial ability."},
     {"name": "Ben Swanster", "position": "Defender", "number": 31, "image": "ben-swanster.jpg", "bio": "An experienced and versatile defender, with a good understanding of the game. Good ability to read the game and cut out danger before it develops, and loves to get forward to!"},
     {"name": "Henry Wright", "position": "Winger", "number": 14, "image": "henry-wright-p.jpg", "bio": "A direct pacy winger with a good eye for a pass and also for a goal."},
-    {"name": "Dan Pearce", "position": "TBA", "number": 34, "image": "colchester-rangers-logo.jpg", "bio": "TBA"},
+    {"name": "Dan Pearce", "position": "Defender", "number": 34, "image": "dan-pearce.jpg", "bio": "Experienced defender, good in the air, comfortable on the ball, looking to play forward passes and also good at breaking up play."},
     {"name": "Danny Dibell", "position": "Defensive Midfielder", "number": 32, "image": "colchester-rangers-logo.jpg", "bio": "A left-footed defensive midfielder who is strong in the tackle, good at reading the game, breaking up play, and progressing the ball forward."},
 ]
 
@@ -84,10 +84,10 @@ results = [
     { "opponent": "Bradfield Rovers Reserves", "score": "2-6", "date": "August 8,2026", "venue": "Harwich High School", "competition": "Friendly", "goalscorers": "Finlay Parry (2)"},
     {"opponent": "Dedham Reserves","score":"0-5", "date": "August 15, 2026", "venue": "The Duchy, Dedham", "competition": "Friendly", "goalscorers": "None"},
     {"opponent": "Wivenhoe United FC", "score":"1-4", "date": "August 29, 2026", "venue": "Clacton Leisure Centre", "competition": "friendly", "goalscorers": "Finlay Parry"},
-
+    {"opponent": "Silver End United Reservers","score":"0-1", "date": "September 5, 2026", "venue": "Silver End Village Hall", "competition": "League", "goalscorers": "None"},
 ]
 matches = [
-        {"opponent": "Silver End United Reservers", "date": "September 5, 2026", "venue": "Silver End Village Hall", "competition": "League"},
+        
         {"opponent": "Mersea Island First", "date": "September 12, 2026", "venue": "The Glebe (Colchester) #2 ", "competition": "League"},
         {"opponent": "Broomfield A", "date": "September 19, 2026", "venue": "Broomfield Football Club", "competition": "Cup"},
 
@@ -131,9 +131,16 @@ def send_contact_email(name, email, message_text):
 
 @app.context_processor
 def inject_sponsors():
+    css_path = Path(app.static_folder) / "css" / "style.css"
+    try:
+        css_version = css_path.stat().st_mtime_ns
+    except OSError:
+        css_version = 1
+
     return {
         "club_info": club_info,
         "sponsors": sponsors,
+        "css_version": css_version,
     }
 
 

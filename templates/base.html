@@ -24,7 +24,7 @@
     <script type="application/ld+json">
       {{ schema_data | safe }}
     </script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v=css_version) }}" />
   </head>
   <body>
     <header class="site-header">
