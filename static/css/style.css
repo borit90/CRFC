@@ -71,6 +71,26 @@
   font-weight: 700;
 }
 
+.admin-record-picker {
+  display: grid;
+  gap: 0.35rem;
+  max-width: 34rem;
+  margin: 1rem 0;
+}
+
+.admin-record-picker label {
+  font-weight: 600;
+}
+
+.admin-record-picker select {
+  width: 100%;
+  padding: 0.7rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #ffffff;
+  font: inherit;
+}
+
 .admin-form {
   display: grid;
   gap: 1rem;

@@ -192,6 +192,26 @@ class AdminPanelTests(unittest.TestCase):
             self.assertIn(section, response.data)
         self.assertIn(b'id="panel-fixtures"', response.data)
 
+    def test_player_result_and_fixture_records_are_selected_before_editing(self):
+        self.sign_in()
+
+        response = self.client.get("/admin")
+
+        for collection in ("players", "results", "fixtures"):
+            record = app_module.get_collection(collection)[0]
+            self.assertIn(
+                f'id="record-select-{collection}"'.encode(),
+                response.data,
+            )
+            self.assertIn(
+                f'<option value="{record["id"]}">'.encode(),
+                response.data,
+            )
+            self.assertIn(
+                f'data-admin-record="{collection}-{record["id"]}" hidden'.encode(),
+                response.data,
+            )
+
     def test_fixtures_can_be_added_updated_and_removed_in_admin(self):
         self.sign_in()
         token = self.csrf_token()

@@ -76,26 +76,60 @@
           <summary>Add {{ section.singular }}</summary>
           {{ record_form(section) }}
         </details>
-        {% for record in section.records %}
-          <article class="admin-record">
-            <h3>
-              {% if section.key == "results" %}
-                {{ record.date }} — {{ record.opponent }} ({{ record.score }})
-              {% elif section.key == "fixtures" %}
-                {{ record.date }} — {{ record.opponent }}
-              {% else %}
-                {{ record.name }}
-              {% endif %}
-            </h3>
-            {{ record_form(section, record) }}
-            <form action="{{ url_for('admin_delete', collection=section.key, record_id=record.id) }}" method="post" onsubmit="return confirm('Remove this item?');">
-              <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-              <button class="button button-danger" type="submit">Remove</button>
-            </form>
-          </article>
+        {% if section.key in ("players", "results", "fixtures") %}
+          {% if section.records %}
+            <div class="admin-record-picker">
+              <label for="record-select-{{ section.key }}">Edit existing {{ section.singular|lower }}</label>
+              <select id="record-select-{{ section.key }}" data-admin-record-select>
+                <option value="">Choose {{ section.singular|lower }}…</option>
+                {% for record in section.records %}
+                  <option value="{{ record.id }}">
+                    {% if section.key == "players" %}
+                      #{{ record.number }} — {{ record.name }}
+                    {% elif section.key == "results" %}
+                      {{ record.date }} — {{ record.opponent }} ({{ record.score }})
+                    {% else %}
+                      {{ record.date }} — {{ record.opponent }}
+                    {% endif %}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+            {% for record in section.records %}
+              <article class="admin-record" data-admin-record="{{ section.key }}-{{ record.id }}" hidden>
+                <h3>
+                  {% if section.key == "results" %}
+                    {{ record.date }} — {{ record.opponent }} ({{ record.score }})
+                  {% elif section.key == "fixtures" %}
+                    {{ record.date }} — {{ record.opponent }}
+                  {% else %}
+                    {{ record.name }}
+                  {% endif %}
+                </h3>
+                {{ record_form(section, record) }}
+                <form action="{{ url_for('admin_delete', collection=section.key, record_id=record.id) }}" method="post" onsubmit="return confirm('Remove this item?');">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+                  <button class="button button-danger" type="submit">Remove</button>
+                </form>
+              </article>
+            {% endfor %}
+          {% else %}
+            <p>No {{ section.label|lower }} have been added yet.</p>
+          {% endif %}
         {% else %}
-          <p>No {{ section.label|lower }} have been added yet.</p>
-        {% endfor %}
+          {% for record in section.records %}
+            <article class="admin-record">
+              <h3>{{ record.name }}</h3>
+              {{ record_form(section, record) }}
+              <form action="{{ url_for('admin_delete', collection=section.key, record_id=record.id) }}" method="post" onsubmit="return confirm('Remove this item?');">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+                <button class="button button-danger" type="submit">Remove</button>
+              </form>
+            </article>
+          {% else %}
+            <p>No {{ section.label|lower }} have been added yet.</p>
+          {% endfor %}
+        {% endif %}
       </section>
     {% endfor %}
   </section>
@@ -114,6 +148,15 @@
     };
     const savedAdminTab = adminTabs.find((tab) => tab.id === sessionStorage.getItem(activeAdminTabStorageKey));
     if (savedAdminTab) activateAdminTab(savedAdminTab, false);
+
+    document.querySelectorAll('[data-admin-record-select]').forEach((select) => {
+      select.addEventListener('change', () => {
+        const sectionKey = select.id.replace('record-select-', '');
+        document.querySelectorAll(`[data-admin-record^="${sectionKey}-"]`).forEach((record) => {
+          record.hidden = record.dataset.adminRecord !== `${sectionKey}-${select.value}`;
+        });
+      });
+    });
 
     adminTabs.forEach((tab, index) => {
       tab.addEventListener('click', () => activateAdminTab(tab));
