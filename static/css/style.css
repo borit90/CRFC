@@ -880,8 +880,8 @@ body {
 
   .data-table tr {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.75rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
     margin-bottom: 0.75rem;
     padding: 0.75rem 0;
     border-bottom: 1px solid #e2e8f0;
@@ -891,11 +891,13 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
-    padding: 0.9rem;
+    min-width: 0;
+    padding: 0.65rem;
     border: 1px solid #e2e8f0;
     border-radius: 14px;
     background: #ffffff;
-    text-align: left;
+    text-align: center;
+    overflow-wrap: anywhere;
   }
 
   .data-table td::before {
@@ -908,6 +910,60 @@ body {
   .data-table td.goalscorers-cell {
     max-width: none;
     white-space: normal;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    overflow-wrap: anywhere;
+  }
+
+  .site-header .container,
+  main.container,
+  .sponsors-section .container {
+    text-align: center;
+  }
+
+  main.container {
+    width: calc(100% - 1rem);
+  }
+
+  .admin-heading {
+    align-items: center;
+    text-align: center;
+  }
+
+  .admin-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .admin-form input,
+  .admin-form textarea,
+  .contact-form input,
+  .contact-form textarea {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .charity-card {
+    padding-top: 6rem;
+  }
+
+  .charity-logo-link {
+    top: 0.75rem;
+    right: 50%;
+    transform: translateX(50%);
+  }
+
+  .modal-list {
+    list-style-position: inside;
+    padding-left: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .data-table tr {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
