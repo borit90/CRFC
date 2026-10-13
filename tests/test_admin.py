@@ -197,10 +197,22 @@ class AdminPanelTests(unittest.TestCase):
 
         response = self.client.get("/admin")
 
-        for collection in ("players", "results", "fixtures"):
+        for collection, singular in (
+            ("players", "Player"),
+            ("results", "Result"),
+            ("fixtures", "Fixture"),
+        ):
             record = app_module.get_collection(collection)[0]
             self.assertIn(
                 f'id="record-select-{collection}"'.encode(),
+                response.data,
+            )
+            self.assertIn(
+                f'<div class="admin-add">\n            <h3>Add {singular}</h3>'.encode(),
+                response.data,
+            )
+            self.assertNotIn(
+                f"<summary>Add {singular}</summary>".encode(),
                 response.data,
             )
             self.assertIn(

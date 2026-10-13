@@ -72,11 +72,11 @@
         {% if not loop.first %}hidden{% endif %}
       >
         <h2>{{ section.label }}</h2>
-        <details class="admin-add">
-          <summary>Add {{ section.singular }}</summary>
-          {{ record_form(section) }}
-        </details>
         {% if section.key in ("players", "results", "fixtures") %}
+          <div class="admin-add">
+            <h3>Add {{ section.singular }}</h3>
+            {{ record_form(section) }}
+          </div>
           {% if section.records %}
             <div class="admin-record-picker">
               <label for="record-select-{{ section.key }}">Edit existing {{ section.singular|lower }}</label>
@@ -117,6 +117,10 @@
             <p>No {{ section.label|lower }} have been added yet.</p>
           {% endif %}
         {% else %}
+          <details class="admin-add">
+            <summary>Add {{ section.singular }}</summary>
+            {{ record_form(section) }}
+          </details>
           {% for record in section.records %}
             <article class="admin-record">
               <h3>{{ record.name }}</h3>
