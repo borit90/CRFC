@@ -127,6 +127,10 @@
   flex-direction: column;
 }
 
+.admin-record[hidden] {
+  display: none;
+}
+
 body {
   margin: 0;
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
