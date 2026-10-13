@@ -1,13 +1,19 @@
 import os
 import random
 import json
-from datetime import datetime
+import hmac
+import secrets
+import sqlite3
+import uuid
+from contextlib import contextmanager
+from datetime import date, datetime, timedelta
+from functools import wraps
 from pathlib import Path
 from dotenv import load_dotenv, find_dotenv
 import smtplib
 import ssl
 from email.message import EmailMessage
-from flask import Flask, render_template, request, flash, redirect, url_for, Response
+from flask import Flask, abort, flash, redirect, render_template, request, Response, session, url_for
 
 app = Flask(__name__)
 
@@ -21,7 +27,15 @@ if not dotenv_path:
 if dotenv_path:
     load_dotenv(dotenv_path)
 
-app.secret_key = os.environ.get("FLASK_SECRET_KEY", "replace-with-a-secure-key")
+app.secret_key = os.environ.get("FLASK_SECRET_KEY") or secrets.token_urlsafe(32)
+app.config["DATABASE_PATH"] = Path(app.instance_path) / "club.sqlite3"
+app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+app.config["SESSION_COOKIE_SECURE"] = os.environ.get("SESSION_COOKIE_SECURE", "false").lower() in ("1", "true", "yes")
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=12)
+ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "")
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "")
 
 MAIL_SERVER = (os.environ.get("MAIL_SERVER") or "localhost").strip() or "localhost"
 MAIL_PORT = int(os.environ.get("MAIL_PORT", "25" if MAIL_SERVER == "localhost" else "587"))
@@ -46,12 +60,12 @@ sponsors = [
 
 staff = [
    
-    {"name": "Henry Wright", "role": "Club Chairman, Welfare Officer, fixture secretary", "bio": "Proud founder of Colchester Rangers FC, overseeing all club operations.", "image": "henry-wright.jpg"}, 
-    {"name": "Barry Calver", "role": "Vice Chairman", "bio": "Vice chairman of Colchester Rangers FC, supporting the club's operations and development.", "image": "barry-calver.jpg"},
-    {"name": "Mark Pilgrim", "role": "Manager", "bio": "First team manager, with a wealth of experience locally at ESBL premier level.", "image": "mark-pilgrim.jpg"},
+    {"name": "Henry Wright", "role": "Club Chairman, fixture secretary", "bio": "Proud founder of Colchester Rangers FC, overseeing all club operations.", "image": "henry-wright.jpg"},
+    {"name": "Barry Calver", "role": "Vice Chairman, Website Developer", "bio": "Vice chairman of Colchester Rangers FC, supporting the club's operations and development.", "image": "barry-calver.jpg"},
+    {"name": "Jamie LePage", "role": "First Team Manager", "bio": "Leading the first team as manager of Colchester Rangers FC.", "image": "Jamie-LePage.jpg"},
     {"name": "Ben Burnett", "role": "Club Nutritionist & Club Secretary", "bio": "Helping with the day-to-day running of the club and providing nutritional guidance to enhance performance.", "image": "ben-burnett.jpg"},
     {"name": "Alex Gooding", "role": "Treasurer", "bio": "Overseeing the club's financial operations and ensuring the club financial health.", "image": "alex-gooding.jpg"},
-    {"name": "Tom Williams", "role": "IT Technician", "bio": "Providing graphics and designs for social media posts and club communications.", "image": "tom-williams.jpg"},
+    {"name": "Tom Williams", "role": "Club Welfare Officer, IT Technician", "bio": "Providing graphics and designs for social media posts and club communications.", "image": "tom-williams.jpg"},
     ]
 players = [
     {"name": "James Gentry", "position": "Goalkeeper", "number": 1, "image": "james-gentry.jpg", "bio": "A reliable shot-stopper with great reflexes and command of the box."},
@@ -94,6 +108,454 @@ matches = [
 ]
    
 
+FIXTURE_DATE_FORMATS = (
+    "%B %d, %Y",
+    "%b %d, %Y",
+    "%d %B %Y",
+    "%d %b %Y",
+    "%d/%m/%Y",
+)
+
+
+def parse_fixture_date(value):
+    try:
+        return date.fromisoformat(value.strip())
+    except ValueError:
+        for date_format in FIXTURE_DATE_FORMATS:
+            try:
+                return datetime.strptime(value.strip(), date_format).date()
+            except ValueError:
+                continue
+    return None
+
+
+def get_upcoming_matches(today=None):
+    current_date = today or date.today()
+    return [
+        match
+        for match in get_collection("fixtures")
+        if (fixture_date := parse_fixture_date(match.get("date", ""))) is None
+        or fixture_date >= current_date
+    ]
+
+
+COLLECTION_FIELDS = {
+    "players": ("name", "position", "number", "image", "bio"),
+    "staff": ("name", "role", "bio", "image"),
+    "results": ("opponent", "score", "date", "venue", "competition", "goalscorers"),
+    "fixtures": ("opponent", "date", "venue", "competition"),
+}
+COLLECTION_SCHEMAS = {
+    "players": """
+        CREATE TABLE IF NOT EXISTS players (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            position TEXT NOT NULL,
+            number INTEGER NOT NULL,
+            image TEXT NOT NULL,
+            bio TEXT NOT NULL
+        )
+    """,
+    "staff": """
+        CREATE TABLE IF NOT EXISTS staff (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            role TEXT NOT NULL,
+            bio TEXT NOT NULL,
+            image TEXT NOT NULL
+        )
+    """,
+    "results": """
+        CREATE TABLE IF NOT EXISTS results (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            opponent TEXT NOT NULL,
+            score TEXT NOT NULL,
+            date TEXT NOT NULL,
+            venue TEXT NOT NULL,
+            competition TEXT NOT NULL,
+            goalscorers TEXT NOT NULL
+        )
+    """,
+    "fixtures": """
+        CREATE TABLE IF NOT EXISTS fixtures (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            opponent TEXT NOT NULL,
+            date TEXT NOT NULL,
+            venue TEXT NOT NULL,
+            competition TEXT NOT NULL
+        )
+    """,
+}
+
+
+@contextmanager
+def get_db_connection():
+    database_path = Path(app.config["DATABASE_PATH"])
+    database_path.parent.mkdir(parents=True, exist_ok=True)
+    connection = sqlite3.connect(database_path)
+    connection.row_factory = sqlite3.Row
+    try:
+        yield connection
+        connection.commit()
+    except Exception:
+        connection.rollback()
+        raise
+    finally:
+        connection.close()
+
+
+def initialize_database():
+    with get_db_connection() as connection:
+        for collection, schema in COLLECTION_SCHEMAS.items():
+            connection.execute(schema)
+        connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS schema_migrations (
+                name TEXT PRIMARY KEY,
+                applied_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            """
+        )
+        for collection in ("players", "staff", "results"):
+            count = connection.execute(
+                f"SELECT COUNT(*) FROM {collection}"
+            ).fetchone()[0]
+            if count == 0:
+                fields = COLLECTION_FIELDS[collection]
+                placeholders = ", ".join("?" for _ in fields)
+                field_names = ", ".join(fields)
+                connection.executemany(
+                    f"INSERT INTO {collection} ({field_names}) VALUES ({placeholders})",
+                    [
+                        tuple(item.get(field, "") for field in fields)
+                        for item in globals()[collection]
+                    ],
+                )
+        fixture_migration = "seed_fixtures"
+        if connection.execute(
+            "SELECT 1 FROM schema_migrations WHERE name = ?", (fixture_migration,)
+        ).fetchone() is None:
+            if connection.execute("SELECT COUNT(*) FROM fixtures").fetchone()[0] == 0:
+                connection.executemany(
+                    "INSERT INTO fixtures (opponent, date, venue, competition) VALUES (?, ?, ?, ?)",
+                    [
+                        tuple(fixture.get(field, "") for field in COLLECTION_FIELDS["fixtures"])
+                        for fixture in matches
+                    ],
+                )
+            connection.execute(
+                "INSERT INTO schema_migrations (name) VALUES (?)", (fixture_migration,)
+            )
+        migration_name = "add_jamie_lepage_as_first_team_manager"
+        migration = connection.execute(
+            "SELECT 1 FROM schema_migrations WHERE name = ?", (migration_name,)
+        ).fetchone()
+        if migration is None:
+            existing_manager = connection.execute(
+                "SELECT id FROM staff WHERE name = ? COLLATE NOCASE LIMIT 1",
+                ("Jamie LePage",),
+            ).fetchone()
+            if existing_manager:
+                connection.execute(
+                    "UPDATE staff SET role = ? WHERE id = ?",
+                    ("First Team Manager", existing_manager["id"]),
+                )
+            else:
+                connection.execute(
+                    """
+                    INSERT INTO staff (name, role, bio, image)
+                    VALUES (?, ?, ?, ?)
+                    """,
+                    (
+                        "Jamie LePage",
+                        "First Team Manager",
+                        "Leading the first team as manager of Colchester Rangers FC.",
+                        "Jamie-LePage.jpg",
+                    ),
+                )
+            connection.execute(
+                "INSERT INTO schema_migrations (name) VALUES (?)", (migration_name,)
+            )
+
+
+def get_collection(collection):
+    if collection not in COLLECTION_FIELDS:
+        raise ValueError(f"Unknown collection: {collection}")
+    with get_db_connection() as connection:
+        rows = connection.execute(
+            f"SELECT * FROM {collection} ORDER BY id"
+        ).fetchall()
+    return [dict(row) for row in rows]
+
+
+initialize_database()
+
+
+def csrf_token():
+    token = session.get("_csrf_token")
+    if token is None:
+        token = secrets.token_urlsafe(32)
+        session["_csrf_token"] = token
+    return token
+
+
+def validate_csrf_token():
+    submitted_token = request.form.get("csrf_token", "")
+    expected_token = session.get("_csrf_token", "")
+    if not submitted_token or not expected_token or not hmac.compare_digest(submitted_token, expected_token):
+        abort(400, description="Invalid or missing CSRF token.")
+
+
+def admin_login_required(view):
+    @wraps(view)
+    def wrapped_view(*args, **kwargs):
+        if not ADMIN_USERNAME or not ADMIN_PASSWORD:
+            abort(503, description="Admin login is not configured.")
+        if not session.get("admin_authenticated"):
+            return redirect(url_for("admin_login"))
+        return view(*args, **kwargs)
+
+    return wrapped_view
+
+
+def validate_image_upload(image):
+    if not image or not image.filename:
+        return None
+
+    suffix = Path(image.filename).suffix.lower()
+    allowed_headers = {
+        ".jpg": (b"\xff\xd8\xff",),
+        ".jpeg": (b"\xff\xd8\xff",),
+        ".png": (b"\x89PNG\r\n\x1a\n",),
+        ".gif": (b"GIF87a", b"GIF89a"),
+        ".webp": (b"RIFF",),
+    }
+    if suffix not in allowed_headers:
+        raise ValueError("Use a JPG, PNG, GIF or WebP image.")
+
+    header = image.stream.read(12)
+    image.stream.seek(0)
+    if not any(header.startswith(prefix) for prefix in allowed_headers[suffix]):
+        raise ValueError("The uploaded file does not match its image extension.")
+    if suffix == ".webp" and header[8:12] != b"WEBP":
+        raise ValueError("The uploaded file is not a valid WebP image.")
+
+    filename = f"{uuid.uuid4().hex}{suffix}"
+    upload_directory = Path(app.static_folder) / "uploads"
+    upload_directory.mkdir(parents=True, exist_ok=True)
+    image.save(upload_directory / filename)
+    return f"uploads/{filename}"
+
+
+def remove_unused_upload(image_path):
+    if not image_path or not image_path.startswith("uploads/"):
+        return
+    with get_db_connection() as connection:
+        for collection in ("players", "staff"):
+            if connection.execute(
+                f"SELECT 1 FROM {collection} WHERE image = ? LIMIT 1", (image_path,)
+            ).fetchone():
+                return
+    upload_path = Path(app.static_folder) / image_path
+    if upload_path.is_file():
+        upload_path.unlink()
+
+
+def admin_sections():
+    field_definitions = {
+        "players": [
+            ("name", "Player name", "text", True),
+            ("position", "Position", "text", True),
+            ("number", "Squad number", "number", True),
+            ("bio", "Biography", "textarea", False),
+            ("image", "Portrait image", "file", False),
+        ],
+        "staff": [
+            ("name", "Staff member name", "text", True),
+            ("role", "Role", "text", True),
+            ("bio", "Biography", "textarea", False),
+            ("image", "Portrait image", "file", False),
+        ],
+        "results": [
+            ("date", "Date", "text", True),
+            ("opponent", "Opponent", "text", True),
+            ("score", "Score", "text", True),
+            ("venue", "Venue", "text", True),
+            ("competition", "Competition", "text", True),
+            ("goalscorers", "Goalscorers", "text", False),
+        ],
+        "fixtures": [
+            ("date", "Date", "date", True),
+            ("opponent", "Opponent", "text", True),
+            ("venue", "Venue", "text", True),
+            ("competition", "Competition", "text", True),
+        ],
+    }
+    labels = {
+        "players": ("Players", "Player"),
+        "staff": ("Staff", "Staff member"),
+        "results": ("Results", "Result"),
+        "fixtures": ("Fixtures", "Fixture"),
+    }
+    return [
+        {
+            "key": collection,
+            "label": labels[collection][0],
+            "singular": labels[collection][1],
+            "records": get_collection(collection),
+            "fields": field_definitions[collection],
+        }
+        for collection in ("players", "staff", "results", "fixtures")
+    ]
+
+
+@app.route("/admin", methods=["GET"])
+@admin_login_required
+def admin_dashboard():
+    return render_template(
+        "admin.html",
+        title="Admin Control Panel | Colchester Rangers FC",
+        sections=admin_sections(),
+        csrf_token=csrf_token(),
+    )
+
+
+@app.route("/admin/login", methods=["GET", "POST"])
+def admin_login():
+    if not ADMIN_USERNAME or not ADMIN_PASSWORD:
+        abort(503, description="Admin login is not configured.")
+    if session.get("admin_authenticated"):
+        return redirect(url_for("admin_dashboard"))
+    if request.method == "POST":
+        validate_csrf_token()
+        username = request.form.get("username", "")
+        password = request.form.get("password", "")
+        valid_username = hmac.compare_digest(username.encode("utf-8"), ADMIN_USERNAME.encode("utf-8"))
+        valid_password = hmac.compare_digest(password.encode("utf-8"), ADMIN_PASSWORD.encode("utf-8"))
+        if valid_username and valid_password:
+            session.clear()
+            session["admin_authenticated"] = True
+            session.permanent = True
+            csrf_token()
+            return redirect(url_for("admin_dashboard"))
+        flash("The username or password was incorrect.", "error")
+    return render_template(
+        "admin_login.html",
+        title="Admin Login | Colchester Rangers FC",
+        csrf_token=csrf_token(),
+    )
+
+
+@app.route("/admin/logout", methods=["POST"])
+@admin_login_required
+def admin_logout():
+    validate_csrf_token()
+    session.clear()
+    flash("You have been logged out.", "success")
+    return redirect(url_for("admin_login"))
+
+
+@app.route("/admin/<collection>/save", methods=["POST"])
+@admin_login_required
+def admin_save(collection):
+    if collection not in COLLECTION_FIELDS:
+        abort(404)
+    validate_csrf_token()
+    record_id = request.form.get("id", "").strip()
+    fields = COLLECTION_FIELDS[collection]
+    values = {field: request.form.get(field, "").strip() for field in fields if field != "image"}
+    required_fields = {
+        "players": ("name", "position", "number"),
+        "staff": ("name", "role"),
+        "results": ("opponent", "score", "date", "venue", "competition"),
+        "fixtures": ("opponent", "date", "venue", "competition"),
+    }[collection]
+    if any(not values[field] for field in required_fields):
+        flash("Please complete all required fields.", "error")
+        return redirect(url_for("admin_dashboard"))
+    if collection == "players":
+        try:
+            values["number"] = int(values["number"])
+            if values["number"] < 1:
+                raise ValueError
+        except ValueError:
+            flash("Squad number must be a positive whole number.", "error")
+            return redirect(url_for("admin_dashboard"))
+
+    existing = None
+    if record_id:
+        if not record_id.isdigit():
+            abort(400, description="Invalid record id.")
+        with get_db_connection() as connection:
+            existing = connection.execute(
+                f"SELECT * FROM {collection} WHERE id = ?", (int(record_id),)
+            ).fetchone()
+        if existing is None:
+            abort(404)
+
+    if collection == "players":
+        with get_db_connection() as connection:
+            duplicate = connection.execute(
+                "SELECT 1 FROM players WHERE number = ? AND id != ? LIMIT 1",
+                (values["number"], int(record_id) if record_id else -1),
+            ).fetchone()
+        if duplicate:
+            flash("That squad number is already in use.", "error")
+            return redirect(url_for("admin_dashboard"))
+
+    try:
+        uploaded_image = validate_image_upload(request.files.get("image"))
+    except ValueError as exc:
+        flash(str(exc), "error")
+        return redirect(url_for("admin_dashboard"))
+
+    if "image" in fields:
+        values["image"] = uploaded_image or (existing["image"] if existing else "")
+        if collection == "players" and not values["image"]:
+            values["image"] = "staff-placeholder.svg"
+
+    field_names = tuple(field for field in fields)
+    try:
+        with get_db_connection() as connection:
+            if existing:
+                assignments = ", ".join(f"{field} = ?" for field in field_names)
+                connection.execute(
+                    f"UPDATE {collection} SET {assignments} WHERE id = ?",
+                    tuple(values[field] for field in field_names) + (int(record_id),),
+                )
+            else:
+                placeholders = ", ".join("?" for _ in field_names)
+                connection.execute(
+                    f"INSERT INTO {collection} ({', '.join(field_names)}) VALUES ({placeholders})",
+                    tuple(values[field] for field in field_names),
+                )
+    except sqlite3.Error:
+        if uploaded_image:
+            remove_unused_upload(uploaded_image)
+        raise
+
+    if existing and uploaded_image and existing["image"] != uploaded_image:
+        remove_unused_upload(existing["image"])
+    flash(f"{'Updated' if existing else 'Added'} {collection[:-1] if collection != 'staff' else 'staff member'}.", "success")
+    return redirect(url_for("admin_dashboard"))
+
+
+@app.route("/admin/<collection>/<int:record_id>/delete", methods=["POST"])
+@admin_login_required
+def admin_delete(collection, record_id):
+    if collection not in COLLECTION_FIELDS:
+        abort(404)
+    validate_csrf_token()
+    with get_db_connection() as connection:
+        record = connection.execute(
+            f"SELECT * FROM {collection} WHERE id = ?", (record_id,)
+        ).fetchone()
+        if record is None:
+            abort(404)
+        connection.execute(f"DELETE FROM {collection} WHERE id = ?", (record_id,))
+    remove_unused_upload(record["image"] if "image" in record.keys() else None)
+    flash(f"Removed item from {collection}.", "success")
+    return redirect(url_for("admin_dashboard"))
 
 
 def send_contact_email(name, email, message_text):
@@ -211,15 +673,16 @@ def index():
 
 @app.route("/home")
 def home():
-    star_players = random.sample(players, k=min(4, len(players)))
+    current_players = get_collection("players")
+    star_players = random.sample(current_players, k=min(4, len(current_players)))
     return render_seo_template(
         "index.html",
         title="Home | Colchester Rangers FC",
         description="Official homepage for Colchester Rangers FC with club news, players, results, fixtures and training information.",
         canonical_url=url_for("home", _external=True),
         players=star_players,
-        results=results[:4],
-        matches=matches[:4],
+        results=get_collection("results")[:4],
+        matches=get_upcoming_matches()[:4],
     )
 
 
@@ -230,13 +693,13 @@ def show_staff():
         title="Staff | Colchester Rangers FC",
         description="Meet the Colchester Rangers FC management team and staff members.",
         canonical_url=url_for("show_staff", _external=True),
-        staff=staff,
+        staff=get_collection("staff"),
     )
 
 
 @app.route("/players")
 def show_players():
-    sorted_players = sorted(players, key=lambda player: player["number"])
+    sorted_players = sorted(get_collection("players"), key=lambda player: player["number"])
     return render_seo_template(
         "players.html",
         title="Players | Colchester Rangers FC",
@@ -253,7 +716,7 @@ def show_results():
         title="Results | Colchester Rangers FC",
         description="Review recent match results and club performance summaries.",
         canonical_url=url_for("show_results", _external=True),
-        results=results,
+        results=get_collection("results"),
     )
 
 
@@ -264,7 +727,7 @@ def show_fixtures():
         title="Fixtures | Colchester Rangers FC",
         description="See upcoming fixtures, opponents and match venues for Colchester Rangers FC.",
         canonical_url=url_for("show_fixtures", _external=True),
-        matches=matches,
+        matches=get_upcoming_matches(),
     )
 
 

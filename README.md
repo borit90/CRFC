@@ -9,6 +9,7 @@ A Python Flask website for Colchester Rangers FC.
 - Players page
 - Results page
 - Contact form with validation
+- Admin panel for managing results, goalscorers, players and staff
 
 ## Run locally
 
@@ -33,6 +34,12 @@ A Python Flask website for Colchester Rangers FC.
 
 4. Open `http://127.0.0.1:5000` in your browser.
 
+### Admin panel
+
+Set `ADMIN_USERNAME`, `ADMIN_PASSWORD` and a strong, private `FLASK_SECRET_KEY` in a local `.env` file before starting the site. The `.env` file is excluded from Git. Open `/admin/login` to sign in. Change the supplied local admin password to a unique password before exposing the site publicly.
+
+The admin panel has separate tabs to add, edit and remove players, staff, results and fixtures. Result entries include goalscorers; player and staff forms accept optional JPG, PNG, GIF or WebP portraits. Data is stored in `instance/club.sqlite3`, and uploaded portraits are stored in `static/uploads/`. Keep both persistent and backed up when deploying.
+
 ## cPanel deployment for Krysta
 
 This project is prepared for deployment to a cPanel Python/Passenger hosting account.
@@ -50,8 +57,11 @@ This project is prepared for deployment to a cPanel Python/Passenger hosting acc
 1. Upload the project files to the domain document root, or to the application folder if the site is running from a subdirectory.
 2. Make sure the folder contains [passenger_wsgi.py](passenger_wsgi.py) and [.htaccess](.htaccess).
 3. In cPanel, install the packages from [requirements.txt](requirements.txt) using the Python app or dependency installer if available.
-4. Set the environment variables for the contact form and secret key in cPanel's environment settings:
+4. Set the admin and secret-key environment variables in cPanel's environment settings. Use a strong, unique password and set `SESSION_COOKIE_SECURE=true` when the site is served over HTTPS:
+   - `ADMIN_USERNAME`
+   - `ADMIN_PASSWORD`
    - `FLASK_SECRET_KEY`
+   - `SESSION_COOKIE_SECURE`
    - `MAIL_SERVER`
    - `MAIL_PORT`
    - `MAIL_USE_TLS`
@@ -79,7 +89,10 @@ pip install -r requirements.txt
 ```
 
 4. Set the required environment variables in hPanel (Python app → Environment):
+   - `ADMIN_USERNAME`
+   - `ADMIN_PASSWORD`
    - `FLASK_SECRET_KEY`
+   - `SESSION_COOKIE_SECURE`
    - `MAIL_SERVER`
    - `MAIL_PORT`
    - `MAIL_USE_TLS`

@@ -20,6 +20,10 @@
             <td data-label="Venue">{{ match.venue }}</td>
             <td data-label="Competition">{{ match.competition }}</td>
           </tr>
+        {% else %}
+          <tr>
+            <td colspan="4">There are no upcoming fixtures at this time.</td>
+          </tr>
         {% endfor %}
       </tbody>
     </table>

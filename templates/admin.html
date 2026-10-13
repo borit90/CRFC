@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% macro record_form(section, record=none) %}
+  <form class="admin-form" action="{{ url_for('admin_save', collection=section.key) }}" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    {% if record %}
+      <input type="hidden" name="id" value="{{ record.id }}" />
+    {% endif %}
+    <div class="admin-fields">
+      {% for field_name, label, field_type, required in section.fields %}
+        {% if field_type != "file" %}
+          <label>
+            {{ label }}
+            {% if field_type == "textarea" %}
+              <textarea name="{{ field_name }}" {% if required %}required{% endif %}>{{ record.get(field_name, "") if record else "" }}</textarea>
+            {% else %}
+              <input
+                type="{{ field_type }}"
+                name="{{ field_name }}"
+                value="{{ record.get(field_name, "") if record else "" }}"
+                {% if field_type == "number" %}min="1"{% endif %}
+                {% if required %}required{% endif %}
+              />
+            {% endif %}
+          </label>
+        {% else %}
+          <label>
+            {{ label }} {% if record %}(optional; leave empty to keep current image){% endif %}
+            <input type="file" name="image" accept=".jpg,.jpeg,.png,.gif,.webp" />
+            {% if record and record.image %}
+              <small>Current file: {{ record.image }}</small>
+            {% endif %}
+          </label>
+        {% endif %}
+      {% endfor %}
+    </div>
+    <button class="button" type="submit">{{ "Save changes" if record else "Add " ~ section.singular }}</button>
+  </form>
+{% endmacro %}
+{% block content %}
+  <section class="admin-panel">
+    <div class="admin-heading">
+      <div>
+        <h2>Admin Control Panel</h2>
+        <p>Manage match results, goalscorers, players and staff.</p>
+      </div>
+      <form action="{{ url_for('admin_logout') }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <button class="button button-secondary" type="submit">Log out</button>
+      </form>
+    </div>
+
+    <div class="admin-tabs" role="tablist" aria-label="Admin sections">
+      {% for section in sections %}
+        <button
+          class="admin-tab"
+          id="tab-{{ section.key }}"
+          type="button"
+          role="tab"
+          aria-controls="panel-{{ section.key }}"
+          aria-selected="{{ 'true' if loop.first else 'false' }}"
+          tabindex="{{ '0' if loop.first else '-1' }}"
+        >{{ section.label }}</button>
+      {% endfor %}
+    </div>
+
+    {% for section in sections %}
+      <section
+        class="admin-section"
+        id="panel-{{ section.key }}"
+        role="tabpanel"
+        aria-labelledby="tab-{{ section.key }}"
+        {% if not loop.first %}hidden{% endif %}
+      >
+        <h2>{{ section.label }}</h2>
+        <details class="admin-add">
+          <summary>Add {{ section.singular }}</summary>
+          {{ record_form(section) }}
+        </details>
+        {% for record in section.records %}
+          <article class="admin-record">
+            <h3>
+              {% if section.key == "results" %}
+                {{ record.date }} — {{ record.opponent }} ({{ record.score }})
+              {% elif section.key == "fixtures" %}
+                {{ record.date }} — {{ record.opponent }}
+              {% else %}
+                {{ record.name }}
+              {% endif %}
+            </h3>
+            {{ record_form(section, record) }}
+            <form action="{{ url_for('admin_delete', collection=section.key, record_id=record.id) }}" method="post" onsubmit="return confirm('Remove this item?');">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+              <button class="button button-danger" type="submit">Remove</button>
+            </form>
+          </article>
+        {% else %}
+          <p>No {{ section.label|lower }} have been added yet.</p>
+        {% endfor %}
+      </section>
+    {% endfor %}
+  </section>
+  <script>
+    const adminTabs = Array.from(document.querySelectorAll('[role="tab"]'));
+    const activateAdminTab = (tab) => {
+      adminTabs.forEach((item) => {
+        const selected = item === tab;
+        item.setAttribute('aria-selected', String(selected));
+        item.tabIndex = selected ? 0 : -1;
+        document.getElementById(item.getAttribute('aria-controls')).hidden = !selected;
+      });
+      tab.focus();
+    };
+    adminTabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => activateAdminTab(tab));
+      tab.addEventListener('keydown', (event) => {
+        let nextIndex;
+        if (event.key === 'ArrowRight') nextIndex = (index + 1) % adminTabs.length;
+        else if (event.key === 'ArrowLeft') nextIndex = (index - 1 + adminTabs.length) % adminTabs.length;
+        else if (event.key === 'Home') nextIndex = 0;
+        else if (event.key === 'End') nextIndex = adminTabs.length - 1;
+        else return;
+        event.preventDefault();
+        activateAdminTab(adminTabs[nextIndex]);
+      });
+    });
+  </script>
+{% endblock %}

@@ -7,7 +7,7 @@
     <meta name="description" content="{{ meta_description or club_info.description }}" />
     <meta name="keywords" content="{{ meta_keywords or 'Colchester Rangers FC, football club, Essex football, community football, local football, youth football, club news, trials, sponsors' }}" />
     <meta name="author" content="{{ club_info.name }}" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="{{ 'noindex, nofollow' if request.endpoint and request.endpoint.startswith('admin_') else 'index, follow' }}" />
     <link rel="canonical" href="{{ canonical_url or request.base_url }}" />
     <meta property="og:title" content="{{ title or club_info.name }}" />
     <meta property="og:description" content="{{ meta_description or club_info.description }}" />
@@ -51,6 +51,7 @@
           <a href="{{ url_for('show_results') }}">Results</a>
           <a href="{{ url_for('show_fixtures') }}">Fixtures</a>
           <a href="{{ url_for('contact') }}">Contact</a>
+          <a href="{{ url_for('admin_dashboard') }}">Admin</a>
           <a href="https://www.instagram.com/colchesterrangers/" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
             <img src="{{ url_for('static', filename='images/instagram.svg') }}" alt="Instagram logo" />
             <span class="visually-hidden">Instagram</span>

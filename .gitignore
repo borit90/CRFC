@@ -1,3 +1,4 @@
 passenger_wsgi.py
-
 .env
+instance/
+static/uploads/

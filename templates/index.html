@@ -5,13 +5,12 @@
     <p>{{ club_info.description }}</p>
     <div class="home-cards">
       <article>
-        <h3>Assistant Manager / First-Team Coach Required</h3>
-        <p>We are seeking an enthusiastic and passionate individual to join our team, either as Assistant Manager, working alongside Mark, or as a First-Team Coach, helping at training and during warm-ups.</p>
+        <h3>New First-Team Coach </h3>
+        <p>We would all like to thank Ryan Doggett for stepping up into the role of first team coach alongside his playing role! He puts on great sessions for the lads, and nobody dares mess about! </p>
       </article>
-
       <article>
-        <h3>New Manager!</h3>
-        <p>We are delighted to welcome Mark Pilgrim as our new manager and the wealth of experience he brings. We look forward to seeing where he takes us.</p>
+        <h3>New First Team Manager</h3>
+        <p>We are delighted to welcome Jamie LePage as the new first team manager of Colchester Rangers FC. We look forward to the season ahead under his leadership.</p>
       </article>
       <article>
         <h3>Welcome Aboard to Our New Club Nutritionist & Secretary</h3>
@@ -54,7 +53,7 @@
       <h3>Training Information</h3>
       <p><strong>Location:</strong> Colchester Sports Park, Home Lane, Colchester CO1 2QT</p>
       <p><strong>Time:</strong> Wednesdays, 7:00pm – 8:00pm</p>
-      <p><strong>Trial enquiries:</strong> Please contact Mark Pilgrim (Manager) on 07906058930 or Henry Wright on 07923425258 for trial information.</p>
+      <p><strong>Trial enquiries:</strong> Please contact Henry Wright on 07923425258 for trial information.</p>
     </div>
   </section>
 
@@ -113,6 +112,8 @@
       <ul class="card-list">
        {% for match in matches %}
           <li>{{match.date}} — {{ match.opponent }} - {{ match.venue }} - {{match.competition}}</li>
+        {% else %}
+          <li>There are no upcoming fixtures at this time.</li>
         {% endfor %}
       </ul>
       <a class="button" href="{{ url_for('show_fixtures') }}">View All Fixtures</a>
