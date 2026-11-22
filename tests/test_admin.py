@@ -1,6 +1,7 @@
 import tempfile
 import unittest
 from datetime import date
+from io import BytesIO
 from pathlib import Path
 import sqlite3
 from unittest.mock import patch
@@ -171,6 +172,36 @@ class AdminPanelTests(unittest.TestCase):
             "New Staff Member",
             [member["name"] for member in app_module.get_collection("staff")],
         )
+
+    def test_uploaded_staff_image_loads_from_upload_directory(self):
+        self.sign_in()
+        token = self.csrf_token()
+        image_bytes = b"\x89PNG\r\n\x1a\n\x00\x00\x00\x00IEND"
+
+        with tempfile.TemporaryDirectory() as upload_directory:
+            with patch.object(app_module.app, "_static_folder", upload_directory):
+                response = self.client.post(
+                    "/admin/staff/save",
+                    data={
+                        "csrf_token": token,
+                        "name": "Staff With Portrait",
+                        "role": "Coach",
+                        "bio": "Portrait upload test",
+                        "image": (BytesIO(image_bytes), "portrait.png"),
+                    },
+                    content_type="multipart/form-data",
+                )
+                self.assertEqual(response.status_code, 302)
+                staff_member = app_module.get_collection("staff")[-1]
+                self.assertTrue(staff_member["image"].startswith("uploads/"))
+
+                staff_page = self.client.get("/staff")
+                image_url = f"/static/{staff_member['image']}"
+                self.assertIn(image_url.encode(), staff_page.data)
+                image_response = self.client.get(image_url)
+                self.assertEqual(image_response.status_code, 200)
+                self.assertEqual(image_response.data, image_bytes)
+                image_response.close()
 
     def test_admin_mutations_require_csrf_token(self):
         self.sign_in()

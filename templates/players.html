@@ -7,7 +7,8 @@
       {% for player in players %}
         <article class="player-card">
           <div class="player-image-wrap">
-            <img src="{{ url_for('static', filename='images/' + player.image) }}" alt="{{ player.name }}" />
+            {% set image_path = player.image if player.image.startswith("uploads/") else "images/" + player.image %}
+            <img src="{{ url_for('static', filename=image_path) }}" alt="{{ player.name }}" />
             <span class="player-image-number">#{{ player.number }}</span>
           </div>
           <div>

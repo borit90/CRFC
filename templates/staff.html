@@ -7,7 +7,8 @@
       {% for member in staff %}
         <article class="profile-card">
           {% if member.image %}
-            <img src="{{ url_for('static', filename='images/' + member.image) }}" alt="{{ member.name }} portrait" class="profile-image" />
+            {% set image_path = member.image if member.image.startswith("uploads/") else "images/" + member.image %}
+            <img src="{{ url_for('static', filename=image_path) }}" alt="{{ member.name }} portrait" class="profile-image" />
           {% endif %}
           <h3>{{ member.name }}</h3>
           <p class="role">{{ member.role }}</p>

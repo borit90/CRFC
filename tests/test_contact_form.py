@@ -12,7 +12,7 @@ class ContactPageTests(unittest.TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"Contact the Club", response.data)
-        self.assertIn(b"hero-image.png", response.data)
+        self.assertIn(b"new-hero-image.jpg", response.data)
         self.assertIn(b"Contact", response.data)
 
     def test_homepage_includes_official_photographer_section(self):
